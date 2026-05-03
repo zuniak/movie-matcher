@@ -1,9 +1,5 @@
-function App() {
-  return (
-    <div>
-      <h1>Movie Matcher</h1>
-    </div>
-  )
-}
+import AppRouter from './router/AppRouter'
 
-export default App
+export default function App() {
+  return <AppRouter />
+}
