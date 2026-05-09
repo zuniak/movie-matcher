@@ -19,7 +19,7 @@ export function filterMovies(filters = {}) {
   } = filters
 
   return MOVIES.filter((movie) => {
-    if (platforms.length > 0 && !platforms.includes(movie.platform)) return false
+    if (platforms.length > 0 && !movie.platforms.some((p) => platforms.includes(p))) return false
     if (genres.length > 0 && !movie.genre.some((g) => genres.includes(g))) return false
     if (movie.year < yearFrom || movie.year > yearTo) return false
     return true
