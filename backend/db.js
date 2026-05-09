@@ -1,6 +1,5 @@
-import { MOVIES } from '../data/movies'
+import { MOVIES } from './data/movies.js'
 
-// In-memory "database" — shared across all handlers in this process
 const sessions = {}
 
 function generateCode() {
@@ -8,7 +7,6 @@ function generateCode() {
 }
 
 export const db = {
-  // --- movies ---
   getMovies({ platforms = [], genres = [], yearFrom = 1900, yearTo = 2099 } = {}) {
     return MOVIES.filter((m) => {
       if (platforms.length && !m.platforms.some((p) => platforms.includes(p))) return false
@@ -22,7 +20,6 @@ export const db = {
     return MOVIES.find((m) => m.id === id) ?? null
   },
 
-  // --- sessions ---
   createSession({ hostName, name, filters }) {
     const id = generateCode()
     const movies = this.getMovies(filters)
@@ -68,7 +65,6 @@ export const db = {
         session.votes[participantId].push(movieId)
       }
     }
-    // Check for a full match after every vote
     const match = this.findMatch(session)
     if (match) {
       session.status = 'finished'
