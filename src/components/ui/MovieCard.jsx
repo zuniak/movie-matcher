@@ -9,15 +9,21 @@ const PLATFORM_COLORS = {
 }
 
 export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
-  const platformColor = PLATFORM_COLORS[movie.platform] ?? '#555'
-
   return (
     <article className={styles.card}>
       <div className={styles.posterWrapper}>
         <img className={styles.poster} src={movie.poster} alt={movie.title} loading="lazy" />
-        <span className={styles.platform} style={{ backgroundColor: platformColor }}>
-          {movie.platform}
-        </span>
+        <div className={styles.platforms}>
+          {movie.platforms.map((p) => (
+            <span
+              key={p}
+              className={styles.platform}
+              style={{ backgroundColor: PLATFORM_COLORS[p] ?? '#555' }}
+            >
+              {p}
+            </span>
+          ))}
+        </div>
         {progress && (
           <span className={styles.progress}>
             {progress.current} z {progress.total}
@@ -72,12 +78,12 @@ MovieCard.propTypes = {
     title: PropTypes.string.isRequired,
     year: PropTypes.number.isRequired,
     genre: PropTypes.arrayOf(PropTypes.string).isRequired,
-    platform: PropTypes.string.isRequired,
+    platforms: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.string.isRequired,
     poster: PropTypes.string.isRequired,
     rating: PropTypes.number.isRequired,
     duration: PropTypes.string.isRequired,
-    watchUrl: PropTypes.string.isRequired,
+    watchUrls: PropTypes.objectOf(PropTypes.string).isRequired,
   }).isRequired,
   onLike: PropTypes.func.isRequired,
   onSkip: PropTypes.func.isRequired,
