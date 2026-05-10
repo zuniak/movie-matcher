@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Hotjar from '@hotjar/browser'
 import ReactGA from 'react-ga4'
 import { AuthProvider } from './context/AuthContext'
+import { SessionProvider } from './context/SessionContext'
 import AppRouter from './router/AppRouter'
 
 const HOTJAR_SITE_ID = import.meta.env.VITE_HOTJAR_SITE_ID
@@ -20,7 +21,9 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <AppRouter />
+      <SessionProvider>
+        <AppRouter />
+      </SessionProvider>
     </AuthProvider>
   )
 }
