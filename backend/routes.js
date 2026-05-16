@@ -21,11 +21,16 @@ router.get('/movies/:id', (req, res) => {
   res.json({ data: movie })
 })
 
-// POST /api/sessions
+// POST /api/sessions  { hostName, name, filters }
+// Response includes hostId — client must store it to call /start
 router.post('/sessions', (req, res) => {
   const { hostName, name, filters } = req.body
-  const session = db.createSession({ hostName, name, filters })
-  res.status(201).json({ data: session })
+  try {
+    const { session, hostId } = db.createSession({ hostName, name, filters })
+    res.status(201).json({ data: { session, hostId } })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 // GET /api/sessions/:id
@@ -35,7 +40,7 @@ router.get('/sessions/:id', (req, res) => {
   res.json({ data: session })
 })
 
-// POST /api/sessions/:id/join
+// POST /api/sessions/:id/join  { participantName }
 router.post('/sessions/:id/join', (req, res) => {
   const { participantName } = req.body
   const result = db.joinSession(req.params.id, participantName)
@@ -43,14 +48,17 @@ router.post('/sessions/:id/join', (req, res) => {
   res.json({ data: result })
 })
 
-// POST /api/sessions/:id/start
+// POST /api/sessions/:id/start  { hostId }
+// fix 3: only the host (verified by hostId) can start the session
 router.post('/sessions/:id/start', (req, res) => {
-  const result = db.startSession(req.params.id)
+  const { hostId } = req.body
+  if (!hostId) return res.status(400).json({ error: 'Wymagany hostId' })
+  const result = db.startSession(req.params.id, hostId)
   if (result.error) return res.status(result.status).json({ error: result.error })
-  res.json({ data: result })
+  res.json({ data: result.session })
 })
 
-// POST /api/sessions/:id/vote
+// POST /api/sessions/:id/vote  { participantId, movieId, action: 'like' | 'skip' }
 router.post('/sessions/:id/vote', (req, res) => {
   const { participantId, movieId, action } = req.body
   const result = db.castVote(req.params.id, participantId, movieId, action)

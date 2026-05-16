@@ -26,8 +26,11 @@ export async function joinSession(sessionId, participantName) {
   })
 }
 
-export async function startSession(sessionId) {
-  return api(`/sessions/${sessionId}/start`, { method: 'POST' })
+export async function startSession(sessionId, hostId) {
+  return api(`/sessions/${sessionId}/start`, {
+    method: 'POST',
+    body: JSON.stringify({ hostId }),
+  })
 }
 
 /**

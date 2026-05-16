@@ -47,12 +47,12 @@ export default function SetupSessionPage() {
         yearTo,
         type: contentType,
       }
-      const created = await createSession({
+      const { session: created, hostId } = await createSession({
         hostName: sessionState?.hostName ?? 'Host',
         name: sessionName || 'Wieczór filmowy',
         filters,
       })
-      setHostSession(created)
+      setHostSession(created, hostId)
       navigate(`/lobby/${created.id}`)
     } catch (err) {
       setError(err.message)

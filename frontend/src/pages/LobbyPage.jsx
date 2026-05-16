@@ -8,7 +8,7 @@ const POLL_INTERVAL = 2000
 
 export default function LobbyPage() {
   const { sessionId } = useParams()
-  const { role, setHostSession, participantId } = useSession()
+  const { role, hostId, participantId } = useSession()
   const navigate = useNavigate()
 
   const [session, setSession] = useState(null)
@@ -43,8 +43,7 @@ export default function LobbyPage() {
   const handleStart = async () => {
     setStarting(true)
     try {
-      const updated = await startSession(sessionId)
-      setHostSession(updated)
+      await startSession(sessionId, hostId)
       navigate(`/session/${sessionId}`)
     } catch (err) {
       setError(err.message)
