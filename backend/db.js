@@ -3,13 +3,14 @@ import { MOVIES } from './data/movies.js'
 
 const sessions = {}
 
-// Sessions expire after 4 hours of inactivity
 const SESSION_TTL_MS = 4 * 60 * 60 * 1000
 
 function generateCode() {
-  // 8 chars from a 34-char alphabet (no 0/O, 1/I to avoid misreads) → ~1.8 trillion combinations
   const ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
-  return Array.from({ length: 8 }, () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join('')
+  return Array.from(
+    { length: 8 },
+    () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]
+  ).join('')
 }
 
 function uniqueCode() {
@@ -25,9 +26,7 @@ function uniqueCode() {
 function pruneExpired() {
   const now = Date.now()
   for (const id of Object.keys(sessions)) {
-    if (now - sessions[id].createdAt > SESSION_TTL_MS) {
-      delete sessions[id]
-    }
+    if (now - sessions[id].createdAt > SESSION_TTL_MS) delete sessions[id]
   }
 }
 
@@ -45,8 +44,6 @@ export const db = {
     return MOVIES.find((m) => m.id === id) ?? null
   },
 
-  // fix 1: host gets a real UUID so their votes can be counted
-  // fix 4: uniqueCode() checks for collisions; pruneExpired() prevents unbounded growth
   createSession({ hostName, name, filters }) {
     pruneExpired()
     const id = uniqueCode()
@@ -61,9 +58,9 @@ export const db = {
       movies: movies.map((m) => m.id),
       participants: [{ id: hostId, name: hostName, role: 'host' }],
       votes: {},
+      skips: {},
       createdAt: Date.now(),
     }
-    // return hostId separately so the caller can store it for auth
     return { session: sessions[id], hostId }
   },
 
@@ -71,7 +68,6 @@ export const db = {
     return sessions[id] ?? null
   },
 
-  // fix 2: randomUUID() is collision-free by construction
   joinSession(sessionId, participantName) {
     const session = sessions[sessionId]
     if (!session) return { error: 'Sesja nie istnieje', status: 404 }
@@ -82,7 +78,6 @@ export const db = {
     return { session, participantId }
   },
 
-  // fix 3: caller must supply hostId; db validates it before starting
   startSession(sessionId, hostId) {
     const session = sessions[sessionId]
     if (!session) return { error: 'Sesja nie istnieje', status: 404 }
@@ -96,13 +91,20 @@ export const db = {
     const session = sessions[sessionId]
     if (!session) return { error: 'Sesja nie istnieje', status: 404 }
     if (session.status !== 'active') return { error: 'Sesja nie jest aktywna', status: 409 }
-    const isParticipant = session.participants.some((p) => p.id === participantId)
-    if (!isParticipant) return { error: 'Nieznany uczestnik', status: 403 }
+    if (!session.participants.some((p) => p.id === participantId)) {
+      return { error: 'Nieznany uczestnik', status: 403 }
+    }
 
     if (action === 'like') {
       if (!session.votes[participantId]) session.votes[participantId] = []
       if (!session.votes[participantId].includes(movieId)) {
         session.votes[participantId].push(movieId)
+      }
+    } else if (action === 'skip') {
+      // bug 4: record skips so we know a participant has seen the movie
+      if (!session.skips[participantId]) session.skips[participantId] = []
+      if (!session.skips[participantId].includes(movieId)) {
+        session.skips[participantId].push(movieId)
       }
     }
 
@@ -114,19 +116,28 @@ export const db = {
     return { session, match }
   },
 
-  // fix 1 (cont.): counts only participants who have cast at least one vote,
-  // so a session with 1 active voter can still match (host voted, no one else yet)
-  // — actually we count ALL participants; a match requires unanimous agreement.
   findMatch(session) {
-    const userIds = session.participants.map((p) => p.id)
+    // bug 3: a participant with no votes entry is AFK and would block the match forever.
+    // Rule: only participants who have cast at least one vote (like or skip) are counted.
+    // An AFK participant who never interacted is excluded from the required quorum.
+    const activeIds = session.participants
+      .map((p) => p.id)
+      .filter(
+        (uid) =>
+          (session.votes[uid]?.length ?? 0) > 0 || (session.skips[uid]?.length ?? 0) > 0
+      )
+
+    if (activeIds.length === 0) return null
+
     const counts = {}
-    for (const uid of userIds) {
+    for (const uid of activeIds) {
       for (const mid of session.votes[uid] ?? []) {
         counts[mid] = (counts[mid] ?? 0) + 1
       }
     }
-    const matchId = Object.keys(counts).find((id) => counts[id] === userIds.length)
-    return matchId ? { movieId: matchId, matchedBy: userIds } : null
+
+    const matchId = Object.keys(counts).find((id) => counts[id] === activeIds.length)
+    return matchId ? { movieId: matchId, matchedBy: activeIds } : null
   },
 
   getCloseContenders(session, winnerId, limit = 4) {

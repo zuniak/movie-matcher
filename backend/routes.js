@@ -3,12 +3,18 @@ import { db } from './db.js'
 
 const router = Router()
 
+function parseYear(value, fallback) {
+  const n = Number(value)
+  return Number.isFinite(n) ? n : fallback
+}
+
 // GET /api/movies
 router.get('/movies', (req, res) => {
   const platforms = req.query.platforms?.split(',').filter(Boolean) ?? []
   const genres = req.query.genres?.split(',').filter(Boolean) ?? []
-  const yearFrom = Number(req.query.yearFrom ?? 1900)
-  const yearTo = Number(req.query.yearTo ?? 2099)
+  // bug 8: guard against NaN from malformed query params
+  const yearFrom = parseYear(req.query.yearFrom, 1900)
+  const yearTo = parseYear(req.query.yearTo, 2099)
 
   const movies = db.getMovies({ platforms, genres, yearFrom, yearTo })
   res.json({ data: movies, total: movies.length })
@@ -22,11 +28,16 @@ router.get('/movies/:id', (req, res) => {
 })
 
 // POST /api/sessions  { hostName, name, filters }
-// Response includes hostId — client must store it to call /start
 router.post('/sessions', (req, res) => {
   const { hostName, name, filters } = req.body
+  // bug 5: validate hostName so p.name[0] can never crash the lobby view
+  if (!hostName?.trim()) return res.status(400).json({ error: 'hostName jest wymagany' })
   try {
-    const { session, hostId } = db.createSession({ hostName, name, filters })
+    const { session, hostId } = db.createSession({
+      hostName: hostName.trim(),
+      name: name?.trim() || 'Wieczór filmowy',
+      filters,
+    })
     res.status(201).json({ data: { session, hostId } })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -43,13 +54,14 @@ router.get('/sessions/:id', (req, res) => {
 // POST /api/sessions/:id/join  { participantName }
 router.post('/sessions/:id/join', (req, res) => {
   const { participantName } = req.body
-  const result = db.joinSession(req.params.id, participantName)
+  // bug 5: validate participantName so p.name[0] can never crash the lobby view
+  if (!participantName?.trim()) return res.status(400).json({ error: 'participantName jest wymagany' })
+  const result = db.joinSession(req.params.id, participantName.trim())
   if (result.error) return res.status(result.status).json({ error: result.error })
   res.json({ data: result })
 })
 
 // POST /api/sessions/:id/start  { hostId }
-// fix 3: only the host (verified by hostId) can start the session
 router.post('/sessions/:id/start', (req, res) => {
   const { hostId } = req.body
   if (!hostId) return res.status(400).json({ error: 'Wymagany hostId' })
@@ -61,6 +73,9 @@ router.post('/sessions/:id/start', (req, res) => {
 // POST /api/sessions/:id/vote  { participantId, movieId, action: 'like' | 'skip' }
 router.post('/sessions/:id/vote', (req, res) => {
   const { participantId, movieId, action } = req.body
+  if (!participantId || !movieId || !['like', 'skip'].includes(action)) {
+    return res.status(400).json({ error: 'Wymagane: participantId, movieId, action (like|skip)' })
+  }
   const result = db.castVote(req.params.id, participantId, movieId, action)
   if (result.error) return res.status(result.status).json({ error: result.error })
   res.json({ data: result })

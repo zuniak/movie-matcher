@@ -104,12 +104,14 @@ export default function LobbyPage() {
         {isHost ? (
           <>
             <p className={styles.hint}>
-              Poczekaj aż wszyscy dołączą, a następnie rozpocznij sesję
+              {session.participants.length < 2
+                ? 'Czekaj aż ktoś dołączy, aby można było wystartować'
+                : 'Wszyscy gotowi? Kliknij aby rozpocząć głosowanie'}
             </p>
             <button
               className={styles.btnStart}
               onClick={handleStart}
-              disabled={starting || session.participants.length < 1}
+              disabled={starting || session.participants.length < 2}
             >
               {starting ? 'Startowanie…' : 'Rozpocznij sesję →'}
             </button>

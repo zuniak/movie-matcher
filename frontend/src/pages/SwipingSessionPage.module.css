@@ -68,3 +68,26 @@
   font-size: 15px;
   color: var(--color-text-secondary);
 }
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-top: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.voteError {
+  background: #fff0f0;
+  color: var(--color-red);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  text-align: center;
+}
