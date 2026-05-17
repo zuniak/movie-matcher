@@ -29,6 +29,12 @@ export function SessionProvider({ children }) {
     save(next)
   }
 
+  // Step 1 (LoginPage host flow): just store the name before a session exists yet
+  const setPendingHost = (hostName) => {
+    update({ pendingHostName: hostName, role: 'host' })
+  }
+
+  // Step 2 (SetupSessionPage): real session returned from POST /api/sessions
   const setHostSession = (session, hostId) => {
     update({
       session,
@@ -51,6 +57,8 @@ export function SessionProvider({ children }) {
         participantId: state?.participantId ?? null,
         hostId: state?.hostId ?? null,
         role: state?.role ?? null,
+        pendingHostName: state?.pendingHostName ?? null,
+        setPendingHost,
         setHostSession,
         setJoinedSession,
         clearSession,

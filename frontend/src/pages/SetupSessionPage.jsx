@@ -16,7 +16,7 @@ const PLATFORM_COLORS = {
 }
 
 export default function SetupSessionPage() {
-  const { session: sessionState, setHostSession } = useSession()
+  const { pendingHostName, setHostSession } = useSession()
   const navigate = useNavigate()
 
   const [sessionName, setSessionName] = useState('')
@@ -48,7 +48,7 @@ export default function SetupSessionPage() {
         type: contentType,
       }
       const { session: created, hostId } = await createSession({
-        hostName: sessionState?.hostName ?? 'Host',
+        hostName: pendingHostName ?? 'Host',
         name: sessionName || 'Wieczór filmowy',
         filters,
       })

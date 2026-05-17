@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { setHostSession, setJoinedSession } = useSession()
+  const { setPendingHost, setJoinedSession } = useSession()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -31,7 +31,7 @@ export default function LoginPage() {
         setJoinedSession(result.session, result.participantId)
         navigate(`/lobby/${result.session.id}`)
       } else {
-        setHostSession({ hostName: name.trim() })
+        setPendingHost(name.trim())
         navigate('/setup')
       }
     } catch (err) {
