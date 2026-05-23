@@ -128,7 +128,7 @@
 
 .slider {
   width: 100%;
-  accent-color: var(--color-purple);
+  accent-color: var(--color-purple); /* legacy — replaced by RangeSlider component
 }
 
 .platforms {

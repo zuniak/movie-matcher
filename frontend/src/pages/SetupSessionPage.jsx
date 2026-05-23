@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { createSession } from '../services/sessionService'
 import { GENRES, PLATFORMS } from '../data/movies'
+import RangeSlider from '../components/ui/RangeSlider'
 import styles from './SetupSessionPage.module.css'
 
 const PLATFORM_LIST = Object.values(PLATFORMS)
@@ -23,8 +24,9 @@ export default function SetupSessionPage() {
   const [contentType, setContentType] = useState('movie') // 'movie' | 'series'
   const [selectedGenres, setSelectedGenres] = useState([])
   const [selectedPlatforms, setSelectedPlatforms] = useState([])
+  const CURRENT_YEAR = new Date().getFullYear()
   const [yearFrom, setYearFrom] = useState(1990)
-  const [yearTo] = useState(new Date().getFullYear())
+  const [yearTo, setYearTo] = useState(CURRENT_YEAR)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -125,13 +127,12 @@ export default function SetupSessionPage() {
               {yearFrom} — {yearTo}
             </span>
           </div>
-          <input
-            className={styles.slider}
-            type="range"
+          <RangeSlider
             min={1970}
-            max={yearTo}
-            value={yearFrom}
-            onChange={(e) => setYearFrom(Number(e.target.value))}
+            max={CURRENT_YEAR}
+            from={yearFrom}
+            to={yearTo}
+            onChange={(f, t) => { setYearFrom(f); setYearTo(t) }}
           />
         </section>
 
