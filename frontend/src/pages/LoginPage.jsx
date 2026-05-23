@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
+import { useAuth } from '../hooks/useAuth'
 import { joinSession } from '../services/sessionService'
 import styles from './LoginPage.module.css'
 
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   const { setPendingHost, setJoinedSession } = useSession()
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -28,9 +30,11 @@ export default function LoginPage() {
     try {
       if (isJoin) {
         const result = await joinSession(code.trim().toUpperCase(), name.trim())
+        login({ name: name.trim() })
         setJoinedSession(result.session, result.participantId)
         navigate(`/lobby/${result.session.id}`)
       } else {
+        login({ name: name.trim() })
         setPendingHost(name.trim())
         navigate('/setup')
       }
