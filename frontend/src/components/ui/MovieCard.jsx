@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import PlatformLogo from './PlatformLogo'
 import styles from './MovieCard.module.css'
 
 const PLATFORM_COLORS = {
@@ -19,8 +20,9 @@ export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
               key={p}
               className={styles.platform}
               style={{ backgroundColor: PLATFORM_COLORS[p] ?? '#555' }}
+              title={p}
             >
-              {p}
+              <PlatformLogo platform={p} size={16} />
             </span>
           ))}
         </div>

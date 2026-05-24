@@ -138,19 +138,25 @@
 }
 
 .platformBtn {
-  padding: 12px;
+  padding: 16px 12px;
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
   background: transparent;
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s;
   color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+}
+
+.platformBtn:hover {
+  border-color: #bbb;
 }
 
 .platformActive {
-  background: #f8f4ff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .error {

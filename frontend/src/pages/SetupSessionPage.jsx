@@ -4,6 +4,7 @@ import { useSession } from '../hooks/useSession'
 import { createSession } from '../services/sessionService'
 import { GENRES, PLATFORMS } from '../data/movies'
 import RangeSlider from '../components/ui/RangeSlider'
+import PlatformLogo from '../components/ui/PlatformLogo'
 import styles from './SetupSessionPage.module.css'
 
 const PLATFORM_LIST = Object.values(PLATFORMS)
@@ -145,10 +146,12 @@ export default function SetupSessionPage() {
                 <button
                   key={p}
                   className={`${styles.platformBtn} ${active ? styles.platformActive : ''}`}
-                  style={active ? { borderColor: PLATFORM_COLORS[p], color: PLATFORM_COLORS[p] } : {}}
+                  style={active ? { borderColor: PLATFORM_COLORS[p], color: PLATFORM_COLORS[p], background: `${PLATFORM_COLORS[p]}12` } : {}}
                   onClick={() => togglePlatform(p)}
+                  aria-label={p}
+                  title={p}
                 >
-                  {p}
+                  <PlatformLogo platform={p} size={26} />
                 </button>
               )
             })}

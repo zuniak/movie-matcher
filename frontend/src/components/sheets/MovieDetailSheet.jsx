@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import PlatformLogo from '../ui/PlatformLogo'
 import styles from './MovieDetailSheet.module.css'
 
 const PLATFORM_COLORS = {
@@ -52,7 +53,7 @@ export default function MovieDetailSheet({ movie, onClose }) {
                   className={styles.platformLink}
                   style={{ backgroundColor: PLATFORM_COLORS[p] ?? '#555' }}
                 >
-                  {p}
+                  <PlatformLogo platform={p} size={20} />
                 </a>
               ))}
             </div>
