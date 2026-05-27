@@ -1,20 +1,28 @@
 import PropTypes from 'prop-types'
-import NetflixLogo from './logos/NetflixLogo'
-import HBOMaxLogo from './logos/HBOMaxLogo'
-import DisneyPlusLogo from './logos/DisneyPlusLogo'
-import PrimeVideoLogo from './logos/PrimeVideoLogo'
+import netflixUrl from '../../assets/logos/netflix.svg'
+import hbomaxUrl from '../../assets/logos/hbomax.svg'
+import disneyUrl from '../../assets/logos/disneyplus.svg'
+import primeUrl from '../../assets/logos/primevideo.svg'
 
 const LOGOS = {
-  Netflix: NetflixLogo,
-  'HBO Max': HBOMaxLogo,
-  'Disney+': DisneyPlusLogo,
-  'Prime Video': PrimeVideoLogo,
+  Netflix: netflixUrl,
+  'HBO Max': hbomaxUrl,
+  'Disney+': disneyUrl,
+  'Prime Video': primeUrl,
 }
 
 export default function PlatformLogo({ platform, size = 28 }) {
-  const Logo = LOGOS[platform]
-  if (!Logo) return <span style={{ fontSize: size * 0.45 }}>{platform}</span>
-  return <Logo size={size} />
+  const src = LOGOS[platform]
+  if (!src) return <span style={{ fontSize: size * 0.5 }}>{platform}</span>
+
+  return (
+    <img
+      src={src}
+      alt={platform}
+      height={size}
+      style={{ display: 'block', width: 'auto', maxWidth: size * 4 }}
+    />
+  )
 }
 
 PlatformLogo.propTypes = {
