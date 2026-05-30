@@ -82,10 +82,10 @@ export default function LoginPage() {
               <input
                 className={`${styles.input} ${styles.inputCode}`}
                 type="text"
-                placeholder="np. A3F7K2"
+                placeholder="np. A3F7K2B9"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
-                maxLength={6}
+                maxLength={8}
               />
             </div>
           )}
