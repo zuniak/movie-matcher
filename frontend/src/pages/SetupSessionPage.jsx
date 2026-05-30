@@ -4,18 +4,11 @@ import { useSession } from '../hooks/useSession'
 import { createSession } from '../services/sessionService'
 import { GENRES, PLATFORMS } from '../data/movies'
 import RangeSlider from '../components/ui/RangeSlider'
-import PlatformLogo from '../components/ui/PlatformLogo'
 import styles from './SetupSessionPage.module.css'
 
 const PLATFORM_LIST = Object.values(PLATFORMS)
 const GENRE_LIST = Object.values(GENRES)
 
-const PLATFORM_COLORS = {
-  Netflix: '#E60914',
-  'HBO Max': '#8A2BE2',
-  'Disney+': '#0072D7',
-  'Prime Video': '#00A8E1',
-}
 
 export default function SetupSessionPage() {
   const { pendingHostName, setHostSession } = useSession()
@@ -146,12 +139,9 @@ export default function SetupSessionPage() {
                 <button
                   key={p}
                   className={`${styles.platformBtn} ${active ? styles.platformActive : ''}`}
-                  style={active ? { borderColor: PLATFORM_COLORS[p], color: PLATFORM_COLORS[p], background: `${PLATFORM_COLORS[p]}12` } : {}}
                   onClick={() => togglePlatform(p)}
-                  aria-label={p}
-                  title={p}
                 >
-                  <PlatformLogo platform={p} size={26} />
+                  {p}
                 </button>
               )
             })}

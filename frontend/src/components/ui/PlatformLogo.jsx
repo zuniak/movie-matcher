@@ -11,16 +11,24 @@ const LOGOS = {
   'Prime Video': primeUrl,
 }
 
-export default function PlatformLogo({ platform, size = 28 }) {
+// CSS filter that converts any black SVG to pure white
+const WHITE_FILTER = 'brightness(0) invert(1)'
+
+export default function PlatformLogo({ platform, size = 28, white = false }) {
   const src = LOGOS[platform]
-  if (!src) return <span style={{ fontSize: size * 0.5 }}>{platform}</span>
+  if (!src) return <span style={{ fontSize: size * 0.5, color: white ? '#fff' : undefined }}>{platform}</span>
 
   return (
     <img
       src={src}
       alt={platform}
       height={size}
-      style={{ display: 'block', width: 'auto', maxWidth: size * 4 }}
+      style={{
+        display: 'block',
+        width: 'auto',
+        maxWidth: size * 4,
+        filter: white ? WHITE_FILTER : undefined,
+      }}
     />
   )
 }
@@ -28,4 +36,5 @@ export default function PlatformLogo({ platform, size = 28 }) {
 PlatformLogo.propTypes = {
   platform: PropTypes.string.isRequired,
   size: PropTypes.number,
+  white: PropTypes.bool,
 }
