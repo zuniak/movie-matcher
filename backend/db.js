@@ -117,27 +117,20 @@ export const db = {
   },
 
   findMatch(session) {
-    // bug 3: a participant with no votes entry is AFK and would block the match forever.
-    // Rule: only participants who have cast at least one vote (like or skip) are counted.
-    // An AFK participant who never interacted is excluded from the required quorum.
-    const activeIds = session.participants
-      .map((p) => p.id)
-      .filter(
-        (uid) =>
-          (session.votes[uid]?.length ?? 0) > 0 || (session.skips[uid]?.length ?? 0) > 0
-      )
-
-    if (activeIds.length === 0) return null
+    // Match requires ALL participants in the session to have liked the same movie.
+    // A participant who hasn't voted yet simply hasn't liked anything — no match possible.
+    // AFK handling (e.g. host kicking idle users) is a separate concern.
+    const allIds = session.participants.map((p) => p.id)
 
     const counts = {}
-    for (const uid of activeIds) {
+    for (const uid of allIds) {
       for (const mid of session.votes[uid] ?? []) {
         counts[mid] = (counts[mid] ?? 0) + 1
       }
     }
 
-    const matchId = Object.keys(counts).find((id) => counts[id] === activeIds.length)
-    return matchId ? { movieId: matchId, matchedBy: activeIds } : null
+    const matchId = Object.keys(counts).find((id) => counts[id] === allIds.length)
+    return matchId ? { movieId: matchId, matchedBy: allIds } : null
   },
 
   getCloseContenders(session, winnerId, limit = 4) {
