@@ -83,6 +83,18 @@
   to { transform: rotate(360deg); }
 }
 
+.retryBtn {
+  margin-top: 8px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-red);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .voteError {
   background: #fff0f0;
   color: var(--color-red);

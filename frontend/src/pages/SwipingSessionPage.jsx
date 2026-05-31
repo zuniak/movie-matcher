@@ -18,9 +18,10 @@ export default function SwipingSessionPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [detailMovie, setDetailMovie] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
   const [voting, setVoting] = useState(false)
   const [voteError, setVoteError] = useState('')
-  const done = !loading && currentIndex >= movies.length
+  const done = !loading && !loadError && currentIndex >= movies.length && movies.length > 0
   const pollRef = useRef(null)
 
   const loadMovies = useCallback(async () => {
@@ -30,8 +31,19 @@ export default function SwipingSessionPage() {
         navigate(`/session/${sessionId}/result`)
         return
       }
+      if (!session.movies?.length) {
+        setLoadError('Sesja nie zawiera żadnych filmów. Wróć i zmień filtry.')
+        return
+      }
       const fetched = await Promise.all(session.movies.map((id) => fetchMovieById(id)))
-      setMovies(fetched.filter(Boolean))
+      const valid = fetched.filter(Boolean)
+      if (valid.length === 0) {
+        setLoadError('Nie udało się załadować filmów. Spróbuj ponownie.')
+        return
+      }
+      setMovies(valid)
+    } catch (err) {
+      setLoadError(err.message ?? 'Błąd połączenia z sesją.')
     } finally {
       setLoading(false)
     }
@@ -84,6 +96,21 @@ export default function SwipingSessionPage() {
     return (
       <div className={`screen ${styles.swiping}`}>
         <p className={styles.loading}>Ładowanie filmów…</p>
+      </div>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <div className={`screen ${styles.swiping}`}>
+        <div className={styles.done}>
+          <p className={styles.doneIcon}>⚠️</p>
+          <h2>Coś poszło nie tak</h2>
+          <p>{loadError}</p>
+          <button className={styles.retryBtn} onClick={() => { setLoadError(''); setLoading(true); loadMovies() }}>
+            Spróbuj ponownie
+          </button>
+        </div>
       </div>
     )
   }
