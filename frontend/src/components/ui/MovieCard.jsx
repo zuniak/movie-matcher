@@ -13,7 +13,19 @@ export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
   return (
     <article className={styles.card}>
       <div className={styles.posterWrapper}>
-        <img className={styles.poster} src={movie.poster} alt={movie.title} loading="lazy" />
+        <img
+          className={styles.poster}
+          src={movie.poster}
+          alt={movie.title}
+          loading="lazy"
+          onError={(e) => {
+            e.target.style.display = 'none'
+            e.target.nextSibling?.classList?.add(styles.posterFallback)
+          }}
+        />
+        <div className={styles.posterPlaceholder}>
+          <span className={styles.posterPlaceholderTitle}>{movie.title}</span>
+        </div>
         <div className={styles.platforms}>
           {movie.platforms.map((p) => (
             <span

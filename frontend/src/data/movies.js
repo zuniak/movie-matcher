@@ -44,7 +44,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Dwoje przyjaciół z dzieciństwa znów się spotyka po latach. Ich więź jest silna, ale los zaplanował dla nich inne drogi.',
-    poster: 'https://image.tmdb.org/t/p/w500/k3waqVXSnarbY9bIKAEsXnxkVZZ.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/gmTocN1iLLDyjEJir2CBnt2EhGE.jpg',
     rating: 7.8,
     duration: '106 min',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
@@ -109,7 +109,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Walka o kontrolę nad potężnym imperium medialnym w rodzinie Royów — dysfunkcyjnej, bogatej i bezwzględnej.',
-    poster: 'https://image.tmdb.org/t/p/w500/e2X8vbBkMf2kb0PYZY3cp1asgOA.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/n1dX6CWSZBvs2hFIsK1W9bvFK2x.jpg',
     rating: 8.9,
     duration: '60 min / odcinek',
     watchUrls: {
@@ -170,7 +170,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Barbie i Ken wyruszają z idealnego Barbieland do świata rzeczywistego, gdzie odkrywają, że doskonałość ma swoje granice.',
-    poster: 'https://image.tmdb.org/t/p/w500/iuFNMS8vlmLFrk3iskTfSdsSMEe.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg',
     rating: 7.0,
     duration: '114 min',
     watchUrls: {
@@ -199,7 +199,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.NETFLIX],
     description:
       'Drobna stłuczka na parkingu przeradza się w obsesyjną wojnę między dwójką nieznajomych, których życia są daleko bardziej skomplikowane niż się wydaje.',
-    poster: 'https://image.tmdb.org/t/p/w500/nYDPmFBn7KB4fBElpFKMuXKFwNI.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/25ih0Xq2zWbxhhKxwhvswKYQyEr.jpg',
     rating: 8.2,
     duration: '40 min / odcinek',
     watchUrls: { [PLATFORMS.NETFLIX]: 'https://www.netflix.com' },
@@ -212,7 +212,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX],
     description:
       'Kolejna odsłona mrocznej komedii obserwującej gości ekskluzywnego kurortu na Sycylii, których wakacyjny raj skrywa ciemne sekrety.',
-    poster: 'https://image.tmdb.org/t/p/w500/5HkAJWiqaEMDf9V5qvXt5KHpxpV.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/nCxIWi5LFGCWSNq9ixudTlOwDuc.jpg',
     rating: 8.1,
     duration: '55 min / odcinek',
     watchUrls: { [PLATFORMS.HBO_MAX]: 'https://www.hbomax.com' },
@@ -270,7 +270,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Pracownicy Lumon Industries poddają się procedurze "severance" — chirurgicznemu rozdzieleniu wspomnień z pracy i życia prywatnego.',
-    poster: 'https://image.tmdb.org/t/p/w500/lNHHCMmGKXNmz1TJfpR4dBHCFnN.jpg',
+    poster: 'https://image.tmdb.org/t/p/w500/dqeaJ0aBH3Y5l9qDAhxowfDUYMF.jpg',
     rating: 8.7,
     duration: '50 min / odcinek',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
