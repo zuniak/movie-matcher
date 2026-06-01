@@ -21,14 +21,37 @@ export default function SwipingSessionPage() {
   const [loadError, setLoadError] = useState('')
   const [voting, setVoting] = useState(false)
   const [voteError, setVoteError] = useState('')
-  const done = !loading && !loadError && currentIndex >= movies.length && movies.length > 0
   const pollRef = useRef(null)
+
+  const done = !loading && !loadError && movies.length > 0 && currentIndex >= movies.length
+
+  const goToResult = useCallback(() => {
+    clearInterval(pollRef.current)
+    navigate(`/session/${sessionId}/result`)
+  }, [navigate, sessionId])
+
+  // Poll session status throughout the entire swiping lifecycle —
+  // not just on the "done" screen. This ensures all participants are
+  // redirected as soon as any participant triggers the match.
+  const pollStatus = useCallback(async () => {
+    try {
+      const session = await getSession(sessionId)
+      if (session.status === 'finished') goToResult()
+    } catch {
+      // keep polling — transient network errors shouldn't break the session
+    }
+  }, [sessionId, goToResult])
+
+  useEffect(() => {
+    pollRef.current = setInterval(pollStatus, POLL_INTERVAL)
+    return () => clearInterval(pollRef.current)
+  }, [pollStatus])
 
   const loadMovies = useCallback(async () => {
     try {
       const session = await getSession(sessionId)
       if (session.status === 'finished') {
-        navigate(`/session/${sessionId}/result`)
+        goToResult()
         return
       }
       if (!session.movies?.length) {
@@ -47,29 +70,11 @@ export default function SwipingSessionPage() {
     } finally {
       setLoading(false)
     }
-  }, [sessionId, navigate])
+  }, [sessionId, goToResult])
 
   useEffect(() => {
     loadMovies()
   }, [loadMovies])
-
-  // bug 1: poll for finished status once this participant has voted on every card
-  const pollForMatch = useCallback(async () => {
-    try {
-      const session = await getSession(sessionId)
-      if (session.status === 'finished') {
-        navigate(`/session/${sessionId}/result`)
-      }
-    } catch {
-      // keep polling
-    }
-  }, [sessionId, navigate])
-
-  useEffect(() => {
-    if (!done) return
-    pollRef.current = setInterval(pollForMatch, POLL_INTERVAL)
-    return () => clearInterval(pollRef.current)
-  }, [done, pollForMatch])
 
   const vote = async (action) => {
     if (voting || currentIndex >= movies.length) return
@@ -79,14 +84,18 @@ export default function SwipingSessionPage() {
     try {
       const result = await castVote(sessionId, participantId, movie.id, action)
       if (result.match) {
-        navigate(`/session/${sessionId}/result`)
+        goToResult()
         return
       }
-      // advance only after a successful vote
       setCurrentIndex((i) => i + 1)
     } catch (err) {
-      // bug 2: surface vote errors instead of swallowing them silently
-      setVoteError(err.message)
+      // If vote rejected because session finished, navigate immediately
+      // instead of showing the 409 error message
+      if (err.message?.includes('aktywna') || err.message?.includes('istnieje')) {
+        pollStatus()
+      } else {
+        setVoteError(err.message)
+      }
     } finally {
       setVoting(false)
     }
@@ -107,7 +116,14 @@ export default function SwipingSessionPage() {
           <p className={styles.doneIcon}>⚠️</p>
           <h2>Coś poszło nie tak</h2>
           <p>{loadError}</p>
-          <button className={styles.retryBtn} onClick={() => { setLoadError(''); setLoading(true); loadMovies() }}>
+          <button
+            className={styles.retryBtn}
+            onClick={() => {
+              setLoadError('')
+              setLoading(true)
+              loadMovies()
+            }}
+          >
             Spróbuj ponownie
           </button>
         </div>
@@ -115,8 +131,6 @@ export default function SwipingSessionPage() {
     )
   }
 
-  // bug 6: progress bar width = currentIndex / total (before advancing), text = currentIndex + 1
-  // Both now use the same base so bar reaches 100% on the last card
   const progressPct = movies.length > 0 ? (currentIndex / movies.length) * 100 : 0
 
   if (done) {
@@ -137,7 +151,6 @@ export default function SwipingSessionPage() {
   return (
     <div className={`screen ${styles.swiping}`}>
       <header className={styles.header}>
-        {/* bug 6 fixed: both label and bar use currentIndex as the "already swiped" count */}
         <span className={styles.progress}>
           {currentIndex + 1} z {movies.length}
         </span>
