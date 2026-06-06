@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import styles from './AuthPage.module.css'
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -17,11 +16,7 @@ export default function AuthPage() {
     setError('')
     setLoading(true)
     try {
-      if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password)
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password)
-      }
+      await signInWithEmailAndPassword(auth, email, password)
       navigate('/')
     } catch (err) {
       setError(err.message)
@@ -38,10 +33,8 @@ export default function AuthPage() {
       </header>
 
       <div className={styles.content}>
-        <h1 className={styles.title}>{isLogin ? 'Zaloguj się' : 'Zarejestruj się'}</h1>
-        <p className={styles.subtitle}>
-          {isLogin ? 'Witaj z powrotem!' : 'Utwórz nowe konto'}
-        </p>
+        <h1 className={styles.title}>Zaloguj się</h1>
+        <p className={styles.subtitle}>Witaj z powrotem!</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.field}>
@@ -56,6 +49,7 @@ export default function AuthPage() {
               autoFocus
             />
           </div>
+
           <div className={styles.field}>
             <label className={styles.label}>Hasło</label>
             <input
@@ -67,17 +61,17 @@ export default function AuthPage() {
               required
             />
           </div>
+
           {error && <p className={styles.error}>{error}</p>}
+
           <button className={styles.btnSubmit} type="submit" disabled={loading}>
-            {loading ? 'Ładowanie...' : isLogin ? 'Zaloguj się' : 'Zarejestruj się'}
+            {loading ? 'Logowanie...' : 'Zaloguj się'}
           </button>
         </form>
 
         <p className={styles.switchMode}>
-          {isLogin ? 'Nie masz konta? ' : 'Masz już konto? '}
-          <button className={styles.switchBtn} onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? 'Zarejestruj się' : 'Zaloguj się'}
-          </button>
+          Nie masz konta?{' '}
+          <Link to="/register">Zarejestruj się</Link>
         </p>
       </div>
     </div>

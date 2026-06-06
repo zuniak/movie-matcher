@@ -6,6 +6,7 @@ import ProtectedRoute from './ProtectedRoute'
 import SplashPage from '../pages/SplashPage'
 import LoginPage from '../pages/LoginPage'
 import AuthPage from '../pages/AuthPage'
+import RegisterPage from '../pages/RegisterPage'
 import NotFoundPage from '../pages/NotFoundPage'
 
 import SetupSessionPage from '../pages/SetupSessionPage'
@@ -25,6 +26,7 @@ export default function AppRouter() {
         <Route path="/" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         {/* protected — share AppLayout (BottomNav) */}
         <Route
