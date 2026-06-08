@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { joinSession } from '../services/sessionService'
 import styles from './LoginPage.module.css'
@@ -14,8 +14,10 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const location = useLocation()
   const { setHostSession, setJoinedSession } = useSession()
   const navigate = useNavigate()
+  const returnPath = location.state?.returnPath || '/'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,7 +46,7 @@ export default function LoginPage() {
   return (
     <div className={`screen ${styles.login}`}>
       <header className={styles.header}>
-        <Link to="/" className={styles.back}>
+        <Link to={returnPath} className={styles.back}>
           ← Powrót
         </Link>
         <span className={styles.logo}>🎬 Movie Matcher</span>
@@ -95,7 +97,10 @@ export default function LoginPage() {
 
         <p className={styles.switchMode}>
           {isJoin ? 'Chcesz utworzyć sesję? ' : 'Masz kod sesji? '}
-          <Link to={`/login?mode=${isJoin ? 'host' : 'join'}`}>
+          <Link
+            to={`/login?mode=${isJoin ? 'host' : 'join'}`}
+            state={{ returnPath }}
+          >
             {isJoin ? 'Utwórz nową' : 'Dołącz do istniejącej'}
           </Link>
         </p>
