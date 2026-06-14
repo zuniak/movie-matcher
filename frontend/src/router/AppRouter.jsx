@@ -3,6 +3,7 @@ import AnalyticsListener from '../components/AnalyticsListener'
 import AppLayout from '../components/layout/AppLayout'
 import ProtectedRoute from './ProtectedRoute'
 
+import SplashScreenPage from '../pages/SplashScreenPage'
 import SplashPage from '../pages/SplashPage'
 import LoginPage from '../pages/LoginPage'
 import AuthPage from '../pages/AuthPage'
@@ -16,6 +17,7 @@ import SwipingSessionPage from '../pages/SwipingSessionPage'
 import MatchResultPage from '../pages/MatchResultPage'
 import SessionHistoryPage from '../pages/SessionHistoryPage'
 import UserProfilePage from '../pages/UserProfilePage'
+import MovieCatalogPage from '../pages/MovieCatalogPage'
 
 export default function AppRouter() {
   return (
@@ -23,7 +25,8 @@ export default function AppRouter() {
       <AnalyticsListener />
       <Routes>
         {/* public */}
-        <Route path="/" element={<SplashPage />} />
+        <Route path="/" element={<SplashScreenPage />} />
+        <Route path="/splash" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -38,9 +41,19 @@ export default function AppRouter() {
         >
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/setup" element={<SetupSessionPage />} />
-          <Route path="/history" element={<SessionHistoryPage />} />
+          <Route path="/catalog" element={<MovieCatalogPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
         </Route>
+
+        {/* history can use mock fallback for dev so it loads even when auth/origin is inconsistent */}
+        <Route
+          path="/history"
+          element={
+            <AppLayout>
+              <SessionHistoryPage />
+            </AppLayout>
+          }
+        />
 
         {/* protected — no BottomNav (full-screen flows) */}
         <Route

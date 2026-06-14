@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useSession } from '../hooks/useSession'
 import { MOVIES } from '../data/movies'
 import styles from './DashboardPage.module.css'
 
@@ -12,6 +13,7 @@ const recentSessions = [
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
+  const { session } = useSession()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -19,29 +21,32 @@ export default function DashboardPage() {
     navigate('/auth')
   }
 
+  const openSessionPath = session?.status === 'active' ? `/session/${session.id}` : session?.status === 'waiting' ? `/lobby/${session.id}` : null
+
   return (
     <div className={`screen ${styles.dashboard}`}>
       <header className={styles.pageHeader}>
         <div>
-          <p className={styles.pageLabel}>Dashboard</p>
-          <h1 className={styles.pageTitle}>Good evening, {user?.displayName ?? 'Alex'}</h1>
+          <span className={styles.brand}>MOVIEMATCH</span>
+          <p className={styles.pageLabel}>Przegląd</p>
         </div>
-        <div className={styles.avatarCircle} aria-label="User profile">
+        <div className={styles.avatarSmall} aria-label="User profile">
           {user?.displayName ? user.displayName.charAt(0).toUpperCase() : 'A'}
         </div>
       </header>
 
       <section className={styles.heroCard}>
-        <div className={styles.brandRow}>
-          <span className={styles.brandMark}>MOVIEMATCH</span>
-          <span className={styles.brandDot} />
+        <div className={styles.heroIntro}>
+          <p className={styles.heroKicker}>
+            Witaj ponownie{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}
+          </p>
+          <h1 className={styles.heroTitle}>Gotowy na wieczór filmowy?</h1>
+          <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
         </div>
-
-        <p className={styles.heroSubtitle}>Ready to find tonight’s watch?</p>
 
         <div className={styles.buttonRow}>
           <button className={styles.primaryButton} type="button" onClick={() => navigate('/setup')}>
-            New session
+            Nowa sesja
           </button>
           <button
             className={styles.secondaryButton}
@@ -52,26 +57,35 @@ export default function DashboardPage() {
               })
             }
           >
-            Join session
+            Dołącz do sesji
           </button>
         </div>
 
-        <div className={styles.statusCard}>
-          <div>
-            <p className={styles.sessionCode}>CIN-847</p>
-            <p className={styles.sessionInfo}>3 participants · waiting</p>
+        {openSessionPath ? (
+          <div className={styles.statusCard}>
+            <div>
+              <p className={styles.sessionCode}>{session.code ?? session.id}</p>
+              <p className={styles.sessionInfo}>
+                {session.participants?.length ?? 1}{' '}
+                {(session.participants?.length ?? 1) === 1 ? 'uczestnik' : 'uczestników'} · {session.status === 'active' ? 'w trakcie' : 'lobby'}
+              </p>
+            </div>
+            <button
+              className={styles.rejoinButton}
+              type="button"
+              onClick={() => navigate(openSessionPath)}
+            >
+              Przejdź do sesji →
+            </button>
           </div>
-          <button className={styles.rejoinButton} type="button">
-            Rejoin →
-          </button>
-        </div>
+        ) : null}
       </section>
 
       <section className={styles.suggestedSection}>
         <div className={styles.sectionHeading}>
-          <h2>Suggested Today</h2>
-          <button type="button" className={styles.viewAllButton} onClick={() => navigate('/setup')}>
-            View all
+          <h2>Propozycje</h2>
+          <button type="button" className={styles.viewAllButton} onClick={() => navigate('/catalog')}>
+            Zobacz wszystkie
           </button>
         </div>
 
@@ -97,7 +111,7 @@ export default function DashboardPage() {
 
       <section className={styles.recentSection}>
         <div className={styles.sectionHeading}>
-          <h2>Recent Sessions</h2>
+          <h2>Ostatnie sesje</h2>
         </div>
 
         <div className={styles.recentList}>

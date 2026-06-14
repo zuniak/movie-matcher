@@ -1,8 +1,11 @@
 .dashboard {
-  padding: 24px;
+  min-height: calc(100dvh - 90px);
+  padding: 24px 16px 32px;
   gap: 24px;
   display: flex;
   flex-direction: column;
+  background: radial-gradient(circle at top left, rgba(233, 9, 20, 0.08), transparent 26%),
+    #f7f5f2;
 }
 
 .pageHeader {
@@ -10,28 +13,36 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  padding: 18px 18px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 28px;
+  box-shadow: 0 16px 38px rgba(17, 17, 17, 0.06);
+}
+
+.brand {
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-red);
 }
 
 .pageLabel {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
-  margin-bottom: 8px;
+  margin-top: 6px;
 }
 
-.pageTitle {
-  font-size: 32px;
-  line-height: 1.05;
-  font-weight: 800;
-}
-
+.avatarSmall,
 .avatarCircle {
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: var(--color-surface);
+  background: linear-gradient(180deg, rgba(230, 9, 20, 0.14), rgba(230, 9, 20, 0.04));
   box-shadow: var(--shadow-card);
   display: grid;
   place-items: center;
@@ -39,41 +50,41 @@
   font-weight: 800;
 }
 
-.heroCard {
+.heroIntro {
   display: grid;
-  gap: 20px;
-  padding: 24px;
-  border-radius: 28px;
-  background: var(--color-surface);
-  border: 1px solid rgba(17, 17, 17, 0.06);
-  box-shadow: var(--shadow-card);
+  gap: 8px;
 }
 
-.brandRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brandMark {
-  font-weight: 800;
-  color: var(--color-red);
-  letter-spacing: 0.2em;
+.heroKicker {
   text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--color-red);
+  font-weight: 900;
 }
 
-.brandDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--color-text-secondary);
+.heroTitle {
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.1;
 }
 
 .heroSubtitle {
   color: var(--color-text-secondary);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.75;
 }
+
+.heroCard {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 32px;
+  background: #ffffff;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  box-shadow: 0 24px 60px rgba(17, 17, 17, 0.08);
+}
+
 
 .buttonRow {
   display: flex;

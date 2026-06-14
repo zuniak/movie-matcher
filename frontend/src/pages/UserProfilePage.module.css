@@ -1,0 +1,223 @@
+:root {
+  --profile-card: #ffffff;
+}
+
+.profile {
+  padding: 20px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: radial-gradient(circle at top left, rgba(233, 9, 20, 0.08), transparent 26%),
+    #f7f5f2;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--profile-card);
+  border-radius: 32px;
+  padding: 28px 24px 32px;
+  box-shadow: 0 26px 64px rgba(17, 17, 17, 0.08);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.brand {
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  color: var(--color-red);
+  text-transform: uppercase;
+}
+
+.profileIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.04));
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 14px;
+}
+
+.avatarSection {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+}
+
+.avatarCircle {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #e60914 0%, #c10010 100%);
+  color: white;
+  font-size: 34px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 18px 48px rgba(230, 9, 20, 0.24);
+}
+
+.editButton {
+  position: absolute;
+  right: calc(50% - 52px);
+  bottom: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background: #e60914;
+  color: white;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 22px rgba(230, 9, 20, 0.18);
+}
+
+.profileDetails {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.profileHeading {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.profileMeta {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.statCard {
+  background: #fafafa;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 18px;
+  padding: 16px;
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-red);
+  margin-bottom: 6px;
+}
+
+.statLabel {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+}
+
+.settingsCard {
+  background: #fafafa;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 22px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.settingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.settingRow:last-child {
+  margin-bottom: 0;
+}
+
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  display: inline-grid;
+  align-items: center;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #e5e5e5;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.switch input:checked + .slider {
+  background: var(--color-red);
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.menuButton {
+  width: 100%;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 18px;
+}
+
+.menuArrow {
+  color: var(--color-text-secondary);
+  font-size: 20px;
+}
+
+.logoutButton {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 0;
+  background: none;
+  color: var(--color-red);
+  font-weight: 700;
+  font-size: 15px;
+}

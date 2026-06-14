@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
+import { useAuth } from '../hooks/useAuth'
 import { createSession } from '../services/sessionService'
+import { addSessionHistory, pickMovieForFilters } from '../services/sessionHistoryService'
 import { GENRES, PLATFORMS } from '../data/movies'
 import styles from './SetupSessionPage.module.css'
 
@@ -17,6 +19,7 @@ const PLATFORM_COLORS = {
 
 export default function SetupSessionPage() {
   const { session: sessionState, setHostSession } = useSession()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   const [sessionName, setSessionName] = useState('')
@@ -53,7 +56,20 @@ export default function SetupSessionPage() {
         filters,
       })
       setHostSession(created)
-      navigate(`/lobby/${created.id}`)
+
+      const predictedMovie = pickMovieForFilters(filters)
+      addSessionHistory(user, {
+        id: created.id,
+        name: created.name,
+        code: created.id,
+        status: 'pending',
+        matchedMovieId: predictedMovie?.id ?? null,
+        participants: 1,
+        createdAt: Date.now(),
+        tags: [...selectedGenres, ...selectedPlatforms],
+      })
+
+      navigate(`/session/${created.id}`)
     } catch (err) {
       setError(err.message)
     } finally {
