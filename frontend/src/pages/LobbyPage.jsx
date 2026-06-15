@@ -110,7 +110,7 @@ export default function LobbyPage() {
             <button
               className={styles.btnStart}
               onClick={handleStart}
-              disabled={starting || session.participants.length < 1}
+              disabled={starting || session.participants.length < 2}
             >
               {starting ? 'Startowanie…' : 'Rozpocznij sesję →'}
             </button>

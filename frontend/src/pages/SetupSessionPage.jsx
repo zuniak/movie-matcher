@@ -70,7 +70,7 @@ export default function SetupSessionPage() {
         tags: [...selectedGenres, ...selectedPlatforms],
       })
 
-      navigate(`/session/${created.id}`)
+      navigate(`/lobby/${created.id}`)
     } catch (err) {
       setError(err.message)
     } finally {
