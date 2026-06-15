@@ -55,7 +55,7 @@ export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
           ✕
         </button>
         <button
-          className={`${styles.actionBtn} ${styles.info}`}
+          className={`${styles.actionBtn} ${styles.infoBtn}`}
           onClick={onInfo}
           aria-label="Szczegóły"
         >
