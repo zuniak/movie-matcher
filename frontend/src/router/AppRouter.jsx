@@ -55,31 +55,10 @@ export default function AppRouter() {
           }
         />
 
-        {/* protected — no BottomNav (full-screen flows) */}
-        <Route
-          path="/lobby/:sessionId"
-          element={
-            <ProtectedRoute>
-              <LobbyPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/session/:sessionId"
-          element={
-            <ProtectedRoute>
-              <SwipingSessionPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/session/:sessionId/result"
-          element={
-            <ProtectedRoute>
-              <MatchResultPage />
-            </ProtectedRoute>
-          }
-        />
+        {/* public — accessible to guests who joined via code */}
+        <Route path="/lobby/:sessionId" element={<LobbyPage />} />
+        <Route path="/session/:sessionId" element={<SwipingSessionPage />} />
+        <Route path="/session/:sessionId/result" element={<MatchResultPage />} />
 
         {/* 404 fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
