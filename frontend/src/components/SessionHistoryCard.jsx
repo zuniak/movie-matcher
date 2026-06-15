@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styles from '../pages/SessionHistoryPage.module.css'
 
 const STATUS_LABELS = {
@@ -7,6 +8,7 @@ const STATUS_LABELS = {
 }
 
 export default function SessionHistoryCard({ session, movie, onClick }) {
+  const [imgError, setImgError] = useState(false)
   const sessionDate = new Date(session.createdAt).toLocaleString('pl-PL', {
     day: '2-digit',
     month: 'short',
@@ -22,10 +24,20 @@ export default function SessionHistoryCard({ session, movie, onClick }) {
     <button type="button" className={styles.historyCard} onClick={onClick}>
       <div className={styles.cardWrapper}>
         <div className={styles.posterFrame}>
-          {movie ? (
-            <img src={movie.poster} alt={movie.title} className={styles.posterImage} />
+          {movie && !imgError ? (
+            <img
+              src={movie.poster}
+              alt={movie.title}
+              className={styles.posterImage}
+              onError={() => setImgError(true)}
+            />
           ) : (
-            <div className={styles.posterPlaceholder}>Brak plakatu</div>
+            <div className={styles.posterPlaceholder}>
+              <span className={styles.posterPlaceholderIcon}>🎬</span>
+              {movie?.title && (
+                <span className={styles.posterPlaceholderTitle}>{movie.title}</span>
+              )}
+            </div>
           )}
         </div>
 
