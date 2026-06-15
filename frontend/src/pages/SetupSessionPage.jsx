@@ -53,7 +53,7 @@ export default function SetupSessionPage() {
         type: contentType,
       }
       const created = await createSession({
-        hostName: sessionState?.hostName ?? 'Host',
+        hostName: user?.displayName ?? 'Host',
         name: sessionName || 'Wieczór filmowy',
         filters,
       })
