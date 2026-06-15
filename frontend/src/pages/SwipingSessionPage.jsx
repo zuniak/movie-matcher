@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { getSession, castVote } from '../services/sessionService'
@@ -6,6 +6,8 @@ import { fetchMovieById } from '../services/movieService'
 import MovieCard from '../components/ui/MovieCard'
 import MovieDetailSheet from '../components/sheets/MovieDetailSheet'
 import styles from './SwipingSessionPage.module.css'
+
+const POLL_INTERVAL = 2000
 
 export default function SwipingSessionPage() {
   const { sessionId } = useParams()
@@ -17,12 +19,19 @@ export default function SwipingSessionPage() {
   const [detailMovie, setDetailMovie] = useState(null)
   const [loading, setLoading] = useState(true)
   const [voting, setVoting] = useState(false)
+  const navigatedRef = useRef(false)
+
+  const goToResult = useCallback(() => {
+    if (navigatedRef.current) return
+    navigatedRef.current = true
+    navigate(`/session/${sessionId}/result`)
+  }, [sessionId, navigate])
 
   const loadMovies = useCallback(async () => {
     try {
       const session = await getSession(sessionId)
       if (session.status === 'finished') {
-        navigate(`/session/${sessionId}/result`)
+        goToResult()
         return
       }
       const fetched = await Promise.all(session.movies.map((id) => fetchMovieById(id)))
@@ -30,11 +39,26 @@ export default function SwipingSessionPage() {
     } finally {
       setLoading(false)
     }
-  }, [sessionId, navigate])
+  }, [sessionId, goToResult])
 
   useEffect(() => {
     loadMovies()
   }, [loadMovies])
+
+  // Poll session status so all participants get redirected when a match is found
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const session = await getSession(sessionId)
+        if (session.status === 'finished') {
+          goToResult()
+        }
+      } catch {
+        // ignore poll errors
+      }
+    }, POLL_INTERVAL)
+    return () => clearInterval(interval)
+  }, [sessionId, goToResult])
 
   const vote = async (action) => {
     if (voting || currentIndex >= movies.length) return
@@ -43,7 +67,7 @@ export default function SwipingSessionPage() {
     try {
       const result = await castVote(sessionId, participantId, movie.id, action)
       if (result.match) {
-        navigate(`/session/${sessionId}/result`)
+        goToResult()
         return
       }
     } catch {
