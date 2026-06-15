@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import confetti from 'canvas-confetti'
-import { getSession } from '../services/sessionService'
-import { fetchMovieById } from '../services/movieService'
-import MoviePoster from '../components/ui/MoviePoster'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { getSessionResult } from '../services/sessionService'
 import styles from './MatchResultPage.module.css'
 
 const WATCH_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -11,79 +8,90 @@ const WATCH_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 export default function MatchResultPage() {
   const { sessionId } = useParams()
   const navigate = useNavigate()
-  const [movie, setMovie] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    getSession(sessionId)
-      .then((session) => {
-        if (session.matchedMovieId) {
-          return fetchMovieById(session.matchedMovieId)
-        }
-        return null
-      })
-      .then((m) => setMovie(m))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+    getSessionResult(sessionId)
+      .then(setResult)
+      .catch((err) => setError(err.message))
   }, [sessionId])
 
-  useEffect(() => {
-    if (loading) return
-    const end = Date.now() + 2500
-    const colors = ['#e60914', '#ffffff', '#ffcc00'];
-    (function frame() {
-      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors })
-      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors })
-      if (Date.now() < end) requestAnimationFrame(frame)
-    })()
-  }, [loading])
-
-  if (loading) {
+  if (error) {
     return (
-      <div className={styles.page}>
-        <div className={styles.loading}>Ładowanie wyniku…</div>
+      <div className={`screen ${styles.result}`}>
+        <div className={styles.errorState}>
+          <p>Nie znaleziono dopasowania 😕</p>
+          <Link to="/dashboard">Wróć do strony głównej</Link>
+        </div>
       </div>
     )
   }
 
-  return (
-    <div className={styles.page}>
-      <MoviePoster
-        src={movie?.poster}
-        alt={movie?.title ?? ''}
-        className={movie?.poster ? styles.poster : styles.posterFallback}
-      />
+  if (!result) {
+    return (
+      <div className={`screen ${styles.result}`}>
+        <p className={styles.loading}>Ładowanie wyniku…</p>
+      </div>
+    )
+  }
 
-      <div className={styles.content}>
-        <p className={styles.kicker}>🎉 Macie dopasowanie!</p>
-        <h1 className={styles.title}>{movie?.title ?? 'Nieznany film'}</h1>
-        {movie && (
-          <>
-            <p className={styles.meta}>
-              {movie.year} · {movie.duration} · ⭐ {movie.rating}
-            </p>
-            <div className={styles.genres}>
-              {movie.genre.map((g) => (
-                <span key={g} className={styles.genre}>{g}</span>
-              ))}
-            </div>
-            {movie.description && (
-              <p className={styles.description}>{movie.description}</p>
-            )}
-          </>
-        )}
+  const { movie, contenders, participants } = result
+
+  return (
+    <div className={`screen ${styles.result}`}>
+      <div className={styles.confetti} aria-hidden>
+        {['🎉', '🎊', '⭐', '🍿', '🎬'].map((e, i) => (
+          <span key={i} className={styles.confettiPiece} style={{ '--i': i }}>
+            {e}
+          </span>
+        ))}
       </div>
 
-      <div className={styles.footer}>
-        <a
-          className={styles.btnWatch}
-          href={WATCH_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Oglądaj teraz →
-        </a>
-        <button className={styles.btnBack} onClick={() => navigate('/dashboard')}>
+      <div className={styles.content}>
+        <p className={styles.matchLabel}>It&apos;s a Match!</p>
+
+        <div className={styles.winner}>
+          {movie.poster && (
+            <img className={styles.poster} src={movie.poster} alt={movie.title} />
+          )}
+          <div className={styles.winnerInfo}>
+            <h1 className={styles.title}>{movie.title}</h1>
+            <p className={styles.meta}>
+              {movie.year} · ⭐ {movie.rating}
+            </p>
+            <p className={styles.matchedBy}>
+              Wybrany przez {participants.length}{' '}
+              {participants.length === 1 ? 'osobę' : 'osoby'}
+            </p>
+            <div className={styles.watchLinks}>
+              <a
+                href={WATCH_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.watchBtn}
+              >
+                Oglądaj teraz →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {contenders && contenders.length > 0 && (
+          <div className={styles.contenders}>
+            <p className={styles.contendersLabel}>Close Contenders</p>
+            <div className={styles.contendersList}>
+              {contenders.map((m) => (
+                <div key={m.id} className={styles.contender}>
+                  <img className={styles.contenderPoster} src={m.poster} alt={m.title} />
+                  <p className={styles.contenderTitle}>{m.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <button className={styles.newSessionBtn} onClick={() => navigate('/dashboard')}>
           Wróć do strony głównej
         </button>
       </div>

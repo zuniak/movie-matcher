@@ -87,7 +87,7 @@ export default function LobbyPage() {
         <p className={styles.codeLabel}>Kod sesji</p>
         <p className={styles.code}>{sessionId}</p>
         <button className={styles.copyBtn} onClick={handleCopyLink}>
-          {copied ? '✓ Skopiowano' : 'Kopiuj link zaproszenia'}
+          {copied ? '✓ Skopiowano' : 'Kopiuj link'}
         </button>
       </div>
 

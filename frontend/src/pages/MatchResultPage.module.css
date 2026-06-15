@@ -1,142 +1,174 @@
-.page {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  background: #111;
+.result {
+  background: linear-gradient(160deg, #1a0533 0%, #0d0d0d 100%);
   color: #fff;
+  overflow: hidden;
 }
 
-.poster {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  max-height: 55dvh;
-  object-fit: cover;
-  display: block;
-  flex-shrink: 0;
+.loading {
+  margin: auto;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.posterFallback {
-  width: 100%;
-  max-height: 55dvh;
-  aspect-ratio: 2 / 3;
+.errorState {
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: linear-gradient(160deg, #2a2a2a, #111);
-  font-size: 48px;
-  flex-shrink: 0;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.errorState a {
+  color: var(--color-purple);
+  font-weight: 600;
+}
+
+.confetti {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.confettiPiece {
+  position: absolute;
+  font-size: 24px;
+  animation: fall 3s ease-in infinite;
+  animation-delay: calc(var(--i) * 0.4s);
+  left: calc(10% + var(--i) * 18%);
+  top: -40px;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110dvh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .content {
   flex: 1;
+  overflow-y: auto;
+  padding: 48px 24px 32px;
   display: flex;
   flex-direction: column;
-  padding: 28px 24px 40px;
-  gap: 8px;
-  background: linear-gradient(to bottom, rgba(17,17,17,0) 0%, #111 40px);
-  margin-top: -40px;
-  position: relative;
+  gap: 24px;
 }
 
-.kicker {
-  font-size: 12px;
+.matchLabel {
+  text-align: center;
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-red);
-  margin: 0;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 900;
-  line-height: 1.1;
-  margin: 4px 0 0;
+  letter-spacing: -0.5px;
   color: #fff;
 }
 
-.meta {
-  font-size: 14px;
-  color: rgba(255,255,255,0.5);
-  margin: 4px 0 0;
-}
-
-.genres {
+.winner {
   display: flex;
-  flex-wrap: wrap;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.poster {
+  width: 90px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.winnerInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  margin-top: 8px;
 }
 
-.genre {
-  font-size: 11px;
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.meta {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.matchedBy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.watchLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.watchBtn {
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-red);
+  color: #fff;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
 }
 
-.description {
-  font-size: 14px;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.6);
-  margin: 12px 0 0;
-}
-
-.footer {
-  padding: 0 24px 40px;
+.contenders {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.btnWatch {
+.contendersLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.contendersList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.contender {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contenderPoster {
   width: 100%;
-  padding: 18px;
-  border: none;
-  border-radius: 20px;
-  background: var(--color-red);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.contenderTitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
   text-align: center;
-  transition: opacity 0.15s;
+  line-height: 1.3;
 }
 
-.btnWatch:hover {
-  opacity: 0.9;
-}
-
-.btnBack {
-  width: 100%;
+.newSessionBtn {
   padding: 16px;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
   background: transparent;
-  color: rgba(255,255,255,0.6);
-  font-size: 15px;
+  color: #fff;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.15s;
-}
-
-.btnBack:hover {
-  border-color: rgba(255,255,255,0.35);
-}
-
-.loading {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.4);
-  font-size: 16px;
+  margin-top: auto;
 }
