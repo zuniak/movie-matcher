@@ -10,6 +10,7 @@ export default function MatchResultPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+  const [posterError, setPosterError] = useState(false)
 
   useEffect(() => {
     getSessionResult(sessionId)
@@ -52,8 +53,13 @@ export default function MatchResultPage() {
         <p className={styles.matchLabel}>It&apos;s a Match!</p>
 
         <div className={styles.winner}>
-          {movie.poster ? (
-            <img className={styles.poster} src={movie.poster} alt={movie.title} />
+          {movie.poster && !posterError ? (
+            <img
+              className={styles.poster}
+              src={movie.poster}
+              alt={movie.title}
+              onError={() => setPosterError(true)}
+            />
           ) : (
             <div className={styles.posterFallback}>🎬</div>
           )}
