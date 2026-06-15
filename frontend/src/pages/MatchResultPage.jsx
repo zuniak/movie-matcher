@@ -1,14 +1,80 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { getSession } from '../services/sessionService'
+import { fetchMovieById } from '../services/movieService'
+import MoviePoster from '../components/ui/MoviePoster'
+import styles from './MatchResultPage.module.css'
+
+const WATCH_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 export default function MatchResultPage() {
+  const { sessionId } = useParams()
+  const navigate = useNavigate()
+  const [movie, setMovie] = useState(null)
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-  }, [])
+    getSession(sessionId)
+      .then((session) => {
+        if (session.matchedMovieId) {
+          return fetchMovieById(session.matchedMovieId)
+        }
+        return null
+      })
+      .then((m) => setMovie(m))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [sessionId])
+
+  if (loading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.loading}>Ładowanie wyniku…</div>
+      </div>
+    )
+  }
 
   return (
-    <div style={{ padding: '40px 24px', textAlign: 'center' }}>
-      <p style={{ fontSize: '32px', marginBottom: '16px' }}>🎬</p>
-      <p style={{ fontWeight: 700 }}>Przekierowuję do serwisu...</p>
+    <div className={styles.page}>
+      <MoviePoster
+        src={movie?.poster}
+        alt={movie?.title ?? ''}
+        className={movie?.poster ? styles.poster : styles.posterFallback}
+      />
+
+      <div className={styles.content}>
+        <p className={styles.kicker}>🎉 Macie dopasowanie!</p>
+        <h1 className={styles.title}>{movie?.title ?? 'Nieznany film'}</h1>
+        {movie && (
+          <>
+            <p className={styles.meta}>
+              {movie.year} · {movie.duration} · ⭐ {movie.rating}
+            </p>
+            <div className={styles.genres}>
+              {movie.genre.map((g) => (
+                <span key={g} className={styles.genre}>{g}</span>
+              ))}
+            </div>
+            {movie.description && (
+              <p className={styles.description}>{movie.description}</p>
+            )}
+          </>
+        )}
+      </div>
+
+      <div className={styles.footer}>
+        <a
+          className={styles.btnWatch}
+          href={WATCH_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Oglądaj teraz →
+        </a>
+        <button className={styles.btnBack} onClick={() => navigate('/dashboard')}>
+          Wróć do strony głównej
+        </button>
+      </div>
     </div>
   )
 }

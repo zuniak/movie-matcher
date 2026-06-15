@@ -1,0 +1,142 @@
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #111;
+  color: #fff;
+}
+
+.poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  max-height: 55dvh;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.posterFallback {
+  width: 100%;
+  max-height: 55dvh;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(160deg, #2a2a2a, #111);
+  font-size: 48px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 40px;
+  gap: 8px;
+  background: linear-gradient(to bottom, rgba(17,17,17,0) 0%, #111 40px);
+  margin-top: -40px;
+  position: relative;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-red);
+  margin: 0;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 4px 0 0;
+  color: #fff;
+}
+
+.meta {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin: 4px 0 0;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.genre {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.6);
+  margin: 12px 0 0;
+}
+
+.footer {
+  padding: 0 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btnWatch {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 20px;
+  background: var(--color-red);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  transition: opacity 0.15s;
+}
+
+.btnWatch:hover {
+  opacity: 0.9;
+}
+
+.btnBack {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btnBack:hover {
+  border-color: rgba(255,255,255,0.35);
+}
+
+.loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 16px;
+}
