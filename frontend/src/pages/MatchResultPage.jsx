@@ -77,23 +77,21 @@ export default function MatchResultPage() {
                 {participants.length === 1 ? 'osobę' : 'osoby'}
               </p>
             </div>
-
-            <div className={styles.watchLinks}>
-              <a
-                href={WATCH_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.watchBtn}
-              >
-                Oglądaj teraz →
-              </a>
-            </div>
           </div>
+
+          <a
+            href={WATCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.watchBtn}
+          >
+            Oglądaj teraz →
+          </a>
         </div>
 
         {contenders && contenders.length > 0 && (
           <div className={styles.contenders}>
-            <p className={styles.contendersLabel}>Close Contenders</p>
+            <p className={styles.contendersLabel}>Bliscy rywale</p>
             <div className={styles.contendersList}>
               {contenders.map((m) => (
                 <div key={m.id} className={styles.contender}>
