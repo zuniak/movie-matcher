@@ -37,18 +37,18 @@ export default function DashboardPage() {
           <span className={styles.brand}>MOVIEMATCH</span>
           <p className={styles.pageLabel}>PRZEGLĄD</p>
         </div>
-        <button className={styles.avatarBtn} onClick={handleLogout} title="Wyloguj">
+        <button className={styles.avatarSmall} onClick={handleLogout} title="Wyloguj">
           {user?.displayName?.charAt(0).toUpperCase() ?? 'A'}
         </button>
       </header>
 
       {openSessionPath && (
-        <section className={styles.activeSessionBanner}>
+        <section className={styles.statusCard}>
           <div>
-            <p className={styles.activeBannerLabel}>Sesja w toku</p>
-            <p className={styles.activeBannerName}>{session.name}</p>
+            <p className={styles.sessionInfo}>Sesja w toku</p>
+            <p className={styles.sessionCode}>{session.name}</p>
           </div>
-          <button className={styles.activeBannerBtn} onClick={() => navigate(openSessionPath)}>
+          <button className={styles.rejoinButton} onClick={() => navigate(openSessionPath)}>
             Wróć →
           </button>
         </section>
@@ -58,9 +58,9 @@ export default function DashboardPage() {
         <p className={styles.heroKicker}>WITAJ PONOWNIE, {(user?.displayName ?? 'UŻYTKOWNIKU').toUpperCase()}</p>
         <h1 className={styles.heroTitle}>Gotowy na wieczór filmowy?</h1>
         <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
-        <div className={styles.heroBtns}>
-          <button className={styles.btnPrimary} onClick={() => navigate('/setup')}>Nowa sesja</button>
-          <button className={styles.btnSecondary} onClick={() => navigate('/lobby/join')}>Dołącz do sesji</button>
+        <div className={styles.buttonRow}>
+          <button className={styles.primaryButton} onClick={() => navigate('/setup')}>Nowa sesja</button>
+          <button className={styles.secondaryButton} onClick={() => navigate('/lobby/join')}>Dołącz do sesji</button>
         </div>
       </section>
 
