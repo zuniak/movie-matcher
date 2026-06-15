@@ -71,3 +71,30 @@ export function addSessionHistory(user, session) {
   writeStorage(key, next)
   return next
 }
+
+export function updateSessionHistory(user, sessionId, updates) {
+  const key = storageKey(user)
+  if (!key) return []
+
+  const current = getSessionHistory(user)
+  const normalizedUpdates = normalizeSession({
+    id: sessionId,
+    ...updates,
+  })
+
+  const exists = current.some((session) => session.id === sessionId)
+
+  const next = exists
+    ? current.map((session) =>
+        session.id === sessionId
+          ? normalizeSession({
+              ...session,
+              ...updates,
+            })
+          : session
+      )
+    : [normalizedUpdates, ...current]
+
+  writeStorage(key, next)
+  return next
+}

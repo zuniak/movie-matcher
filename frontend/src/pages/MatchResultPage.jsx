@@ -3,6 +3,10 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { getSessionResult } from '../services/sessionService'
 import MoviePoster from '../components/ui/MoviePoster'
 import styles from './MatchResultPage.module.css'
+import { getSession } from '../services/sessionService'
+import { updateSessionHistory } from '../services/sessionHistoryService'
+import { useAuth } from '../hooks/useAuth'
+import { useSession } from '../hooks/useSession'
 
 const WATCH_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
@@ -11,12 +15,63 @@ export default function MatchResultPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+  const { user } = useAuth()
+  const { setHostSession, setJoinedSession } = useSession()
 
-  useEffect(() => {
-    getSessionResult(sessionId)
-      .then(setResult)
-      .catch((err) => setError(err.message))
-  }, [sessionId])
+
+useEffect(() => {
+  async function loadResult() {
+    try {
+      const [resultData, sessionData] = await Promise.all([
+        getSessionResult(sessionId),
+        getSession(sessionId),
+      ])
+
+      setResult(resultData)
+
+      if (user) {
+        const autoSaveEnabled = JSON.parse(
+          localStorage.getItem('mm_autosave') ?? 'true'
+        )
+
+        if (autoSaveEnabled) {
+          updateSessionHistory(user, sessionId, {
+            status: 'finished',
+            matchedMovieId: resultData.movie.id,
+            participants: resultData.participants.length,
+            name: sessionData.name,
+            tags: [
+              ...(sessionData.filters?.genres || []),
+              ...(sessionData.filters?.platforms || []),
+            ],
+          })
+        }
+
+        const notificationsEnabled = JSON.parse(
+          localStorage.getItem('mm_notifications') ?? 'false'
+        )
+
+        if (
+          notificationsEnabled &&
+          'Notification' in window &&
+          Notification.permission === 'granted'
+        ) {
+          new Notification('MovieMatch', {
+            body: `Znaleziono dopasowanie: ${resultData.movie.title}`,
+          })
+        }
+
+        setHostSession(null)
+      } else {
+        setJoinedSession(null, null)
+      }
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  loadResult()
+}, [sessionId, user, setHostSession, setJoinedSession])
 
   if (error) {
     return (

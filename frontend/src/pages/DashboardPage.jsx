@@ -3,19 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useSession } from '../hooks/useSession'
 import { fetchMovies } from '../services/movieService'
+import { getSessionHistory } from '../services/sessionHistoryService'
 import MoviePoster from '../components/ui/MoviePoster'
 import styles from './DashboardPage.module.css'
-
-const recentSessions = [
-  { title: 'Family Movie Night', subtitle: 'Matched: Spider-Man: Across the Universe', time: '2d ago' },
-  { title: 'Friday Date Night', subtitle: 'Matched: Past Lives', time: '5d ago' },
-]
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
   const { session } = useSession()
   const navigate = useNavigate()
   const [suggested, setSuggested] = useState([])
+
+  const recentSessions = getSessionHistory(user).slice(0, 3)
 
   useEffect(() => {
     fetchMovies()
@@ -28,7 +26,12 @@ export default function DashboardPage() {
     navigate('/auth')
   }
 
-  const openSessionPath = session?.status === 'active' ? `/session/${session.id}` : session?.status === 'waiting' ? `/lobby/${session.id}` : null
+  const openSessionPath =
+    session?.status === 'active'
+      ? `/session/${session.id}`
+      : session?.status === 'waiting'
+        ? `/lobby/${session.id}`
+        : null
 
   return (
     <div className={styles.dashboard}>
@@ -55,12 +58,20 @@ export default function DashboardPage() {
       )}
 
       <section className={styles.heroCard}>
-        <p className={styles.heroKicker}>WITAJ PONOWNIE, {(user?.displayName ?? 'UŻYTKOWNIKU').toUpperCase()}</p>
+        <p className={styles.heroKicker}>
+          WITAJ PONOWNIE, {(user?.displayName ?? 'UŻYTKOWNIKU').toUpperCase()}
+        </p>
         <h1 className={styles.heroTitle}>Gotowy na wieczór filmowy?</h1>
-        <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
+        <p className={styles.heroSubtitle}>
+          Znajdź film, który wszyscy naprawdę chcą obejrzeć.
+        </p>
         <div className={styles.buttonRow}>
-          <button className={styles.primaryButton} onClick={() => navigate('/setup')}>Nowa sesja</button>
-          <button className={styles.secondaryButton} onClick={() => navigate('/login?mode=join')}>Dołącz do sesji</button>
+          <button className={styles.primaryButton} onClick={() => navigate('/setup')}>
+            Nowa sesja
+          </button>
+          <button className={styles.secondaryButton} onClick={() => navigate('/login?mode=join')}>
+            Dołącz do sesji
+          </button>
         </div>
       </section>
 
@@ -100,13 +111,21 @@ export default function DashboardPage() {
         </div>
 
         <div className={styles.recentList}>
+          {recentSessions.length === 0 && (
+            <p className={styles.emptyState}>Brak ostatnich sesji.</p>
+          )}
+
           {recentSessions.map((s) => (
-            <div key={s.title} className={styles.recentItem}>
+            <div key={s.id} className={styles.recentItem}>
               <div>
-                <p className={styles.recentTitle}>{s.title}</p>
-                <p className={styles.recentSubtitle}>{s.subtitle}</p>
+                <p className={styles.recentTitle}>{s.name}</p>
+                <p className={styles.recentSubtitle}>
+                  {s.matchedMovieId ? 'Dopasowanie znalezione' : 'Sesja bez dopasowania'}
+                </p>
               </div>
-              <span className={styles.recentTime}>{s.time}</span>
+              <span className={styles.recentTime}>
+                {new Date(s.createdAt).toLocaleDateString('pl-PL')}
+              </span>
             </div>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import styles from './UserProfilePage.module.css'
+import { getSessionHistory } from '../services/sessionHistoryService'
 
 function useSetting(key, defaultValue) {
   const [value, setValue] = useState(() => {
@@ -23,7 +24,13 @@ export default function UserProfilePage() {
   const navigate = useNavigate()
   const [notifications, toggleNotifications] = useSetting('mm_notifications', true)
   const [autoSave, toggleAutoSave] = useSetting('mm_autosave', false)
+const history = getSessionHistory(user)
 
+const sessionsCount = history.length
+
+const matchesCount = history.filter(
+  (session) => session.matchedMovieId
+).length
   const displayName = user?.displayName ?? 'John Doe'
   const email = user?.email ?? 'john.doe@cinema.io'
   const initials = displayName
@@ -52,23 +59,16 @@ export default function UserProfilePage() {
 
         <div className={styles.statsRow}>
           <div className={styles.statCard}>
-            <p className={styles.statNumber}>42</p>
+            <p className={styles.statNumber}>{sessionsCount}</p>
             <p className={styles.statLabel}>SESJE</p>
           </div>
           <div className={styles.statCard}>
-            <p className={styles.statNumber}>128</p>
+            <p className={styles.statNumber}>{matchesCount}</p>
             <p className={styles.statLabel}>DOPASOWANIA</p>
           </div>
         </div>
 
         <div className={styles.settingsCard}>
-          <label className={styles.settingRow}>
-            <span>Powiadomienia</span>
-            <span className={styles.switch}>
-              <input type="checkbox" checked={notifications} onChange={toggleNotifications} />
-              <span className={styles.slider} />
-            </span>
-          </label>
 
           <label className={styles.settingRow}>
             <span>Automatyczne zapisywanie</span>

@@ -78,3 +78,22 @@ export default function SessionHistoryPage() {
     </div>
   )
 }
+
+export function updateSessionHistory(user, sessionId, updates) {
+  const key = storageKey(user)
+  if (!key) return []
+
+  const current = getSessionHistory(user)
+
+  const next = current.map((session) =>
+    session.id === sessionId
+      ? normalizeSession({
+          ...session,
+          ...updates,
+        })
+      : session
+  )
+
+  writeStorage(key, next)
+  return next
+}
