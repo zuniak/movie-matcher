@@ -44,7 +44,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Dwoje przyjaciół z dzieciństwa znów się spotyka po latach. Ich więź jest silna, ale los zaplanował dla nich inne drogi.',
-    poster: 'https://image.tmdb.org/t/p/w500/k3waqVXSnarbY9bIKAEsXnxkVZZ.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/h7wJI6mctrDJ9wMbFfgrBUTn1LT.jpg',
     rating: 7.8,
     duration: '106 min',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
@@ -109,7 +109,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Walka o kontrolę nad potężnym imperium medialnym w rodzinie Royów — dysfunkcyjnej, bogatej i bezwzględnej.',
-    poster: 'https://image.tmdb.org/t/p/w500/e2X8vbBkMf2kb0PYZY3cp1asgOA.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/n1dX6CWSZBvs2hFIsK1W9bvFK2x.jpg',
     rating: 8.9,
     duration: '60 min / odcinek',
     watchUrls: {
@@ -170,7 +170,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Barbie i Ken wyruszają z idealnego Barbieland do świata rzeczywistego, gdzie odkrywają, że doskonałość ma swoje granice.',
-    poster: 'https://image.tmdb.org/t/p/w500/iuFNMS8vlmLFrk3iskTfSdsSMEe.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg',
     rating: 7.0,
     duration: '114 min',
     watchUrls: {
@@ -199,7 +199,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.NETFLIX],
     description:
       'Drobna stłuczka na parkingu przeradza się w obsesyjną wojnę między dwójką nieznajomych, których życia są daleko bardziej skomplikowane niż się wydaje.',
-    poster: 'https://image.tmdb.org/t/p/w500/nYDPmFBn7KB4fBElpFKMuXKFwNI.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/25ih0Xq2zWbxhhKxwhvswKYQyEr.jpg',
     rating: 8.2,
     duration: '40 min / odcinek',
     watchUrls: { [PLATFORMS.NETFLIX]: 'https://www.netflix.com' },
@@ -212,7 +212,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX],
     description:
       'Kolejna odsłona mrocznej komedii obserwującej gości ekskluzywnego kurortu na Sycylii, których wakacyjny raj skrywa ciemne sekrety.',
-    poster: 'https://image.tmdb.org/t/p/w500/5HkAJWiqaEMDf9V5qvXt5KHpxpV.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/Ab8aYFE3rCihJWtCDzTl791nPCW.jpg',
     rating: 8.1,
     duration: '55 min / odcinek',
     watchUrls: { [PLATFORMS.HBO_MAX]: 'https://www.hbomax.com' },
@@ -270,7 +270,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Pracownicy Lumon Industries poddają się procedurze "severance" — chirurgicznemu rozdzieleniu wspomnień z pracy i życia prywatnego.',
-    poster: 'https://image.tmdb.org/t/p/w500/lNHHCMmGKXNmz1TJfpR4dBHCFnN.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/dqeaJ0aBH3Y5l9qDAhxowfDUYMF.jpg',
     rating: 8.7,
     duration: '50 min / odcinek',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
@@ -354,7 +354,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Paul Atreides prowadzi misję na niebezpieczną pustynną planetę Arrakis — jedyne źródło melanżu, najcenniejszej substancji we wszechświecie.',
-    poster: 'https://image.tmdb.org/t/p/w500/d5NXSklpcKdKPfPAOOlTpHfqHje.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/4L3Dkdujbrq5EKcrVdWEdTEvhtb.jpg',
     rating: 8.0,
     duration: '155 min',
     watchUrls: {
@@ -412,7 +412,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX],
     description:
       'Rue Bennett, nastolatka zmagająca się z uzależnieniem, nawiguje przez miłość, tożsamość i traumy w brutalnie szczerej opowieści o dorastaniu.',
-    poster: 'https://image.tmdb.org/t/p/w500/lhoxoHqCuMvqq7Bl0y52H3K9hFo.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/aJrG7OkoTMPWG5c8opz8a93AZPY.jpg',
     rating: 8.4,
     duration: '55 min / odcinek',
     watchUrls: { [PLATFORMS.HBO_MAX]: 'https://www.hbomax.com' },
@@ -425,7 +425,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Oklahoma, lata 20. — seria morderstw dziesiątkuje bogaty naród Osagów. FBI podejmuje jedno z pierwszych śledztw w swojej historii.',
-    poster: 'https://image.tmdb.org/t/p/w500/dB6JggMev9nwOhLSxzVEaEbJuBm.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/oA1EDzdHhAMkslPxtiVIRW4T3I4.jpg',
     rating: 7.7,
     duration: '206 min',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
@@ -438,7 +438,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX, PLATFORMS.PRIME_VIDEO],
     description:
       'Para udaje się na wyspę, gdzie ekscentryczny szef kuchni przygotowuje kolację dla elitarnych gości — z „daniami" zupełnie nieoczekiwanymi.',
-    poster: 'https://image.tmdb.org/t/p/w500/v57EVeXXMsQBVMYbvCw9cHCBuKI.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/oHM8wZZ8iP5LG3RfQypcxxjbv78.jpg',
     rating: 7.2,
     duration: '107 min',
     watchUrls: {
@@ -454,7 +454,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.NETFLIX, PLATFORMS.PRIME_VIDEO],
     description:
       'Po tajemniczej śmierci głowy zamożnej rodziny detektyw Benoit Blanc prowadzi śledztwo, w którym nic nie jest tym, czym się wydaje.',
-    poster: 'https://image.tmdb.org/t/p/w500/pThyQovXQrws2Y4a6nAbBEXt6MF.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/fIcDjkeKcLcKuADQHK0MKl5uag2.jpg',
     rating: 7.9,
     duration: '130 min',
     watchUrls: {
@@ -509,7 +509,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.PRIME_VIDEO],
     description:
       'Bezkompromisowa kobieta w Londynie próbuje radzić sobie z życiem, miłością i żałobą — i regularnie rozmawia wprost z widzem.',
-    poster: 'https://image.tmdb.org/t/p/w500/7mH2rlcm9GOjuXblQHHYP8UzZKp.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/27vEYsRKa3eAniwmoccOoluEXQ1.jpg',
     rating: 8.7,
     duration: '26 min / odcinek',
     watchUrls: { [PLATFORMS.PRIME_VIDEO]: 'https://www.primevideo.com' },
@@ -522,7 +522,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.NETFLIX],
     description:
       'Finansista z Chicago przenosi rodzinę do Ozarks, by wyprać pieniądze kartelu narkotykowego — i przeżyć kolejny dzień.',
-    poster: 'https://image.tmdb.org/t/p/w500/oVdLj4JBMlLMxFsUPq5KL4f1s8L.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/d8mmn9thQ5dBk2qbv6BCqGUXWK3.jpg',
     rating: 8.4,
     duration: '60 min / odcinek',
     watchUrls: { [PLATFORMS.NETFLIX]: 'https://www.netflix.com' },
@@ -535,7 +535,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.DISNEY_PLUS],
     description:
       'Samotny łowca nagród z krańców galaktyki bierze pod opiekę tajemnicze dziecko zwane Grogu i staje się jego obrońcą.',
-    poster: 'https://image.tmdb.org/t/p/w500/eU1i6eHXlzMqZriLBi1GwRDvPnd.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/tzf7wHWGedryBMJVXKm6Bgae096.jpg',
     rating: 8.7,
     duration: '40 min / odcinek',
     watchUrls: { [PLATFORMS.DISNEY_PLUS]: 'https://www.disneyplus.com' },
@@ -548,7 +548,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.NETFLIX],
     description:
       'Tajemniczy Profesor werbuje ośmiu złodziei do perfekcyjnego napadu na Mennicę Królewską Hiszpanii — kradzieży 2,4 miliarda euro.',
-    poster: 'https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkipeJApnPhaL3a.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/70YFP5twpuwvymf5nwhPk2jXKZ0.jpg',
     rating: 8.2,
     duration: '45 min / odcinek',
     watchUrls: { [PLATFORMS.NETFLIX]: 'https://www.netflix.com' },
@@ -561,7 +561,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.DISNEY_PLUS, PLATFORMS.HBO_MAX],
     description:
       'Bella Baxter, przywrócona do życia przez ekscentrycznego naukowca, wyrusza w epicką podróż po świecie — by żyć pełnią życia na własnych zasadach.',
-    poster: 'https://image.tmdb.org/t/p/w500/kCGlIMHnOm8JPXEaM7nCECEq34m.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/avGy3y80hhM9D6wfXXOuzEKIME0.jpg',
     rating: 7.9,
     duration: '141 min',
     watchUrls: {
@@ -606,7 +606,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX],
     description:
       'Dwóch detektywów o skrajnie różnych osobowościach prowadzi przez 17 lat sprawę seryjnego mordercy w bagnistej Luizjanie.',
-    poster: 'https://image.tmdb.org/t/p/w500/ky8hhNMoKf0C2YiC1z36VIrnwk8.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/gjllCbLghhhMTGapz3eQ7aFFQvI.jpg',
     rating: 9.0,
     duration: '55 min / odcinek',
     watchUrls: { [PLATFORMS.HBO_MAX]: 'https://www.hbomax.com' },
@@ -645,7 +645,7 @@ export const MOVIES = [
     platforms: [PLATFORMS.HBO_MAX],
     description:
       'Płatny morderca z wojskiem za pasem trafia przez przypadek na zajęcia aktorskie w Los Angeles i desperacko chce zacząć nowe życie.',
-    poster: 'https://image.tmdb.org/t/p/w500/8OdSfhv3FhSv0bxCQ1aSUyLbFbQ.jpg',
+    poster: 'https://media.themoviedb.org/t/p/w500/8e6QiSexmYKaiHGPvbhaFMmQEhc.jpg',
     rating: 8.4,
     duration: '30 min / odcinek',
     watchUrls: { [PLATFORMS.HBO_MAX]: 'https://www.hbomax.com' },
