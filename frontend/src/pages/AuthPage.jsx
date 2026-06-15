@@ -6,31 +6,60 @@ import { useAuth } from '../hooks/useAuth'
 import { getAuthError } from '../utils/firebaseError'
 import styles from './AuthPage.module.css'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+function validateEmail(val) {
+  if (!val) return 'Podaj adres email.'
+  if (!EMAIL_RE.test(val)) return 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
+  return ''
+}
+
+function validatePassword(val) {
+  if (!val) return 'Podaj hasło.'
+  return ''
+}
+
 export default function AuthPage() {
   const { user } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' })
+  const [touched, setTouched] = useState({ email: false, password: false })
+  const [submitError, setSubmitError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/dashboard'
 
   useEffect(() => {
-    if (user) {
-      navigate(from, { replace: true })
-    }
+    if (user) navigate(from, { replace: true })
   }, [user, navigate, from])
+
+  const touch = (field) => setTouched((t) => ({ ...t, [field]: true }))
+
+  const handleEmailChange = (val) => {
+    setEmail(val)
+    if (touched.email) setFieldErrors((e) => ({ ...e, email: validateEmail(val) }))
+  }
+
+  const handlePasswordChange = (val) => {
+    setPassword(val)
+    if (touched.password) setFieldErrors((e) => ({ ...e, password: validatePassword(val) }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
+    setSubmitError('')
+    const errors = { email: validateEmail(email), password: validatePassword(password) }
+    setFieldErrors(errors)
+    setTouched({ email: true, password: true })
+    if (errors.email || errors.password) return
     setLoading(true)
     try {
       await signInWithEmailAndPassword(auth, email, password)
       navigate(from, { replace: true })
     } catch (err) {
-      setError(getAuthError(err))
+      setSubmitError(getAuthError(err))
     } finally {
       setLoading(false)
     }
@@ -51,33 +80,31 @@ export default function AuthPage() {
           <div className={styles.field}>
             <label className={styles.label}>Email</label>
             <input
-              className={styles.input}
+              className={`${styles.input} ${touched.email && fieldErrors.email ? styles.inputError : ''}`}
               type="email"
               placeholder="twoj@email.com"
               value={email}
-              onChange={(e) => { e.target.setCustomValidity(''); setEmail(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity(
-                e.target.validity.valueMissing ? 'Podaj adres email.' : 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
-              )}
-              required
+              onChange={(e) => handleEmailChange(e.target.value)}
+              onBlur={() => { touch('email'); setFieldErrors((err) => ({ ...err, email: validateEmail(email) })) }}
               autoFocus
             />
+            {touched.email && fieldErrors.email && <p className={styles.fieldError}>{fieldErrors.email}</p>}
           </div>
 
           <div className={styles.field}>
             <label className={styles.label}>Hasło</label>
             <input
-              className={styles.input}
+              className={`${styles.input} ${touched.password && fieldErrors.password ? styles.inputError : ''}`}
               type="password"
               placeholder="min. 6 znaków"
               value={password}
-              onChange={(e) => { e.target.setCustomValidity(''); setPassword(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity('Podaj hasło.')}
-              required
+              onChange={(e) => handlePasswordChange(e.target.value)}
+              onBlur={() => { touch('password'); setFieldErrors((err) => ({ ...err, password: validatePassword(password) })) }}
             />
+            {touched.password && fieldErrors.password && <p className={styles.fieldError}>{fieldErrors.password}</p>}
           </div>
 
-          {error && <p className={styles.error}>{error}</p>}
+          {submitError && <p className={styles.error}>{submitError}</p>}
 
           <button className={styles.btnSubmit} type="submit" disabled={loading}>
             {loading ? 'Logowanie...' : 'Zaloguj się'}

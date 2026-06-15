@@ -6,42 +6,105 @@ import { useAuth } from '../hooks/useAuth'
 import { getAuthError } from '../utils/firebaseError'
 import styles from './RegisterPage.module.css'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const validators = {
+  firstName: (v) => (!v.trim() ? 'Podaj swoje imię.' : ''),
+  email: (v) => {
+    if (!v) return 'Podaj adres email.'
+    if (!EMAIL_RE.test(v)) return 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
+    return ''
+  },
+  password: (v) => {
+    if (!v) return 'Podaj hasło.'
+    if (v.length < 6) return 'Hasło musi mieć min. 6 znaków.'
+    return ''
+  },
+  confirmPassword: (v, password) => {
+    if (!v) return 'Powtórz hasło.'
+    if (v !== password) return 'Hasła nie są identyczne.'
+    return ''
+  },
+}
+
 export default function RegisterPage() {
   const { user } = useAuth()
-  const [firstName, setFirstName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
+  const [fields, setFields] = useState({ firstName: '', email: '', password: '', confirmPassword: '' })
+  const [fieldErrors, setFieldErrors] = useState({ firstName: '', email: '', password: '', confirmPassword: '' })
+  const [touched, setTouched] = useState({ firstName: false, email: false, password: false, confirmPassword: false })
+  const [submitError, setSubmitError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user) {
-      navigate('/dashboard')
-    }
+    if (user) navigate('/dashboard')
   }, [user, navigate])
+
+  const touch = (field) => setTouched((t) => ({ ...t, [field]: true }))
+
+  const validate = (field, value) =>
+    field === 'confirmPassword'
+      ? validators.confirmPassword(value, fields.password)
+      : validators[field](value)
+
+  const handleChange = (field, value) => {
+    const updated = { ...fields, [field]: value }
+    setFields(updated)
+    if (touched[field]) {
+      const err = field === 'confirmPassword'
+        ? validators.confirmPassword(value, updated.password)
+        : validators[field](value)
+      setFieldErrors((e) => ({ ...e, [field]: err }))
+      if (field === 'password' && touched.confirmPassword) {
+        setFieldErrors((e) => ({ ...e, confirmPassword: validators.confirmPassword(updated.confirmPassword, value) }))
+      }
+    }
+  }
+
+  const handleBlur = (field) => {
+    touch(field)
+    setFieldErrors((e) => ({ ...e, [field]: validate(field, fields[field]) }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
-    if (!firstName.trim()) return setError('Podaj imię')
-    if (password !== confirmPassword) return setError('Hasła nie są identyczne')
-    if (password.length < 6) return setError('Hasło musi mieć min. 6 znaków')
-
+    setSubmitError('')
+    const errors = {
+      firstName: validators.firstName(fields.firstName),
+      email: validators.email(fields.email),
+      password: validators.password(fields.password),
+      confirmPassword: validators.confirmPassword(fields.confirmPassword, fields.password),
+    }
+    setFieldErrors(errors)
+    setTouched({ firstName: true, email: true, password: true, confirmPassword: true })
+    if (Object.values(errors).some(Boolean)) return
     setLoading(true)
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password)
-      await updateProfile(result.user, {
-        displayName: firstName.trim(),
-      })
+      const result = await createUserWithEmailAndPassword(auth, fields.email, fields.password)
+      await updateProfile(result.user, { displayName: fields.firstName.trim() })
       navigate('/dashboard')
     } catch (err) {
-      setError(getAuthError(err))
+      setSubmitError(getAuthError(err))
     } finally {
       setLoading(false)
     }
   }
+
+  const field = (name, label, type = 'text', placeholder = '') => (
+    <div className={styles.field}>
+      <label className={styles.label}>{label}</label>
+      <input
+        className={`${styles.input} ${touched[name] && fieldErrors[name] ? styles.inputError : ''}`}
+        type={type}
+        placeholder={placeholder}
+        value={fields[name]}
+        onChange={(e) => handleChange(name, e.target.value)}
+        onBlur={() => handleBlur(name)}
+        autoFocus={name === 'firstName'}
+      />
+      {touched[name] && fieldErrors[name] && <p className={styles.fieldError}>{fieldErrors[name]}</p>}
+    </div>
+  )
 
   return (
     <div className={`screen ${styles.register}`}>
@@ -55,62 +118,12 @@ export default function RegisterPage() {
         <p className={styles.subtitle}>Utwórz nowe konto</p>
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          <div className={styles.field}>
-            <label className={styles.label}>Imię</label>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="np. Julita"
-              value={firstName}
-              onChange={(e) => { e.target.setCustomValidity(''); setFirstName(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity('Podaj swoje imię.')}
-              required
-              autoFocus
-            />
-          </div>
+          {field('firstName', 'Imię', 'text', 'np. Zuza')}
+          {field('email', 'Email', 'email', 'twoj@email.com')}
+          {field('password', 'Hasło', 'password', 'min. 6 znaków')}
+          {field('confirmPassword', 'Powtórz hasło', 'password', 'powtórz hasło')}
 
-          <div className={styles.field}>
-            <label className={styles.label}>Email</label>
-            <input
-              className={styles.input}
-              type="email"
-              placeholder="twoj@email.com"
-              value={email}
-              onChange={(e) => { e.target.setCustomValidity(''); setEmail(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity(
-                e.target.validity.valueMissing ? 'Podaj adres email.' : 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
-              )}
-              required
-            />
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>Hasło</label>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="min. 6 znaków"
-              value={password}
-              onChange={(e) => { e.target.setCustomValidity(''); setPassword(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity('Podaj hasło.')}
-              required
-            />
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>Powtórz hasło</label>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="powtórz hasło"
-              value={confirmPassword}
-              onChange={(e) => { e.target.setCustomValidity(''); setConfirmPassword(e.target.value) }}
-              onInvalid={(e) => e.target.setCustomValidity('Powtórz hasło.')}
-              required
-            />
-          </div>
-
-          {error && <p className={styles.error}>{error}</p>}
+          {submitError && <p className={styles.error}>{submitError}</p>}
 
           <button className={styles.btnSubmit} type="submit" disabled={loading}>
             {loading ? 'Rejestracja...' : 'Zarejestruj się'}
