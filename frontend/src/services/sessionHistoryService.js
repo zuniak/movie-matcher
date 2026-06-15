@@ -1,6 +1,6 @@
 import { MOCK_SESSIONS } from './sessionService'
 
-const STORAGE_PREFIX = 'movie-matcher-history:'
+const STORAGE_PREFIX = 'movie-matcher-history-v2:'
 
 function storageKey(user) {
   if (!user) return null
