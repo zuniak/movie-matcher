@@ -1,0 +1,69 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
+import { MOVIES } from '../data/movies'
+import { getSessionHistory } from '../services/sessionHistoryService'
+import SessionHistoryCard from '../components/SessionHistoryCard'
+import styles from './SessionHistoryPage.module.css'
+
+const MOCK_USER = { uid: 'guest', email: 'guest@movie.io', displayName: 'Guest' }
+
+export default function SessionHistoryPage() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [history, setHistory] = useState([])
+
+  useEffect(() => {
+    setHistory(getSessionHistory(user ?? MOCK_USER))
+  }, [user])
+
+  const handleCreate = () => navigate('/setup')
+
+  return (
+    <div className={`screen ${styles.historyPage}`}>
+      <header className={styles.pageHeader}>
+        <span className={styles.brand}>MOVIEMATCH</span>
+        <div className={styles.avatarSmall}>{user?.displayName?.charAt(0).toUpperCase() ?? 'A'}</div>
+      </header>
+
+      <div className={styles.pageIntro}>
+        <h1 className={styles.pageTitle}>Historia sesji</h1>
+        <p className={styles.pageDescription}>
+          Przeglądaj swoje wcześniejsze dopasowania i szybko wracaj do ulubionych filmów.
+        </p>
+      </div>
+
+      {history.length === 0 ? (
+        <div className={styles.emptyState}>
+          <p className={styles.emptyTitle}>Brak historii sesji</p>
+          <p className={styles.emptyText}>
+            Rozpocznij pierwszą sesję filmową, a pojawi się tu dla szybkiego dostępu.
+          </p>
+          <button type="button" className={styles.createButton} onClick={handleCreate}>
+            Utwórz nową sesję
+          </button>
+        </div>
+      ) : (
+        <div className={styles.historyList}>
+          {history.map((session) => {
+            const movie = MOVIES.find((item) => item.id === session.matchedMovieId)
+            const targetPath =
+              session.status === 'finished'
+                ? `/session/${session.id}/result`
+                : session.status === 'active'
+                ? `/session/${session.id}`
+                : `/lobby/${session.id}`
+            return (
+              <SessionHistoryCard
+                key={session.id}
+                session={session}
+                movie={movie}
+                onClick={() => navigate(targetPath)}
+              />
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
