@@ -54,7 +54,7 @@ export default function RegisterPage() {
         <h1 className={styles.title}>Zarejestruj się</h1>
         <p className={styles.subtitle}>Utwórz nowe konto</p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <div className={styles.field}>
             <label className={styles.label}>Imię</label>
             <input
@@ -62,7 +62,8 @@ export default function RegisterPage() {
               type="text"
               placeholder="np. Julita"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setFirstName(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity('Podaj swoje imię.')}
               required
               autoFocus
             />
@@ -75,7 +76,10 @@ export default function RegisterPage() {
               type="email"
               placeholder="twoj@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setEmail(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity(
+                e.target.validity.valueMissing ? 'Podaj adres email.' : 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
+              )}
               required
             />
           </div>
@@ -87,7 +91,8 @@ export default function RegisterPage() {
               type="password"
               placeholder="min. 6 znaków"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setPassword(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity('Podaj hasło.')}
               required
             />
           </div>
@@ -99,7 +104,8 @@ export default function RegisterPage() {
               type="password"
               placeholder="powtórz hasło"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setConfirmPassword(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity('Powtórz hasło.')}
               required
             />
           </div>

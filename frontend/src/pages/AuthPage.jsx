@@ -47,7 +47,7 @@ export default function AuthPage() {
         <h1 className={styles.title}>Zaloguj się</h1>
         <p className={styles.subtitle}>Witaj z powrotem!</p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <div className={styles.field}>
             <label className={styles.label}>Email</label>
             <input
@@ -55,7 +55,10 @@ export default function AuthPage() {
               type="email"
               placeholder="twoj@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setEmail(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity(
+                e.target.validity.valueMissing ? 'Podaj adres email.' : 'Wpisz prawidłowy adres email (np. imie@domena.pl).'
+              )}
               required
               autoFocus
             />
@@ -68,7 +71,8 @@ export default function AuthPage() {
               type="password"
               placeholder="min. 6 znaków"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => { e.target.setCustomValidity(''); setPassword(e.target.value) }}
+              onInvalid={(e) => e.target.setCustomValidity('Podaj hasło.')}
               required
             />
           </div>
