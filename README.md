@@ -155,3 +155,4 @@ Poniższe zrzuty prezentują wygląd aplikacji:
 
 ![Ekran Główny Aplikacji](./docs/images/app_screenshot.png)
 ![Ekran Swipowania](./docs/images/app_swiping.png)
+![Historia Sesji](./docs/images/app_history.png)
