@@ -13,12 +13,7 @@ export default function MatchResultPage() {
       .then((session) => {
         if (cancelled) return
         const movie = MOVIES.find((m) => m.id === session.matchedMovieId)
-        const url = movie ? Object.values(movie.watchUrls)[0] : null
-        if (url) {
-          window.location.href = url
-        } else {
-          setError('Nie znaleziono linku do oglądania.')
-        }
+        window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
       })
       .catch(() => {
         if (!cancelled) setError('Nie udało się załadować sesji.')

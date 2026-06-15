@@ -95,7 +95,7 @@ export default function DashboardPage() {
             <a
               key={movie.id}
               className={styles.suggestedCard}
-              href={Object.values(movie.watchUrls)[0]}
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
               target="_blank"
               rel="noopener noreferrer"
             >

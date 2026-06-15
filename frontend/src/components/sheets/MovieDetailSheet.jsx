@@ -47,7 +47,7 @@ export default function MovieDetailSheet({ movie, onClose }) {
               {movie.platforms.map((p) => (
                 <a
                   key={p}
-                  href={movie.watchUrls[p]}
+                  href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.platformLink}

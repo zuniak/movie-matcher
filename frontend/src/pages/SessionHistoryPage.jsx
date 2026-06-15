@@ -49,7 +49,7 @@ export default function SessionHistoryPage() {
             const movie = MOVIES.find((item) => item.id === session.matchedMovieId)
             const handleClick = () => {
               if (session.status === 'finished' && movie) {
-                window.open(Object.values(movie.watchUrls)[0], '_blank')
+                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')
               } else if (session.status === 'active') {
                 navigate(`/session/${session.id}`)
               } else {
