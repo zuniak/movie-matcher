@@ -153,6 +153,6 @@ Zrzut ekranu pokazuje sekcję Czasu Rzeczywistego w GA4, rejestrującą aktywnyc
 #### 3. Interfejs Aplikacji (Movie Matcher)
 Poniższe zrzuty prezentują wygląd aplikacji:
 
-![Ekran Główny Aplikacji](./docs/images/app_screenshot.png)
-![Ekran Swipowania](./docs/images/app_swiping.png)
+![Konfiguracja Sesji](./docs/images/app_setup.png)
+![Lobby Sesji](./docs/images/app_lobby.png)
 ![Historia Sesji](./docs/images/app_history.png)
