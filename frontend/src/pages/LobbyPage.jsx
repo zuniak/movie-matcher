@@ -34,8 +34,10 @@ export default function LobbyPage() {
     return () => clearInterval(interval)
   }, [fetchSession])
 
+  const joinUrl = `${window.location.origin}/login?mode=join&code=${sessionId}`
+
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(sessionId)
+    navigator.clipboard.writeText(joinUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }

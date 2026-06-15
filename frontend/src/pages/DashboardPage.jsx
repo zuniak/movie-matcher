@@ -60,7 +60,7 @@ export default function DashboardPage() {
         <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
         <div className={styles.buttonRow}>
           <button className={styles.primaryButton} onClick={() => navigate('/setup')}>Nowa sesja</button>
-          <button className={styles.secondaryButton} onClick={() => navigate('/lobby/join')}>Dołącz do sesji</button>
+          <button className={styles.secondaryButton} onClick={() => navigate('/login?mode=join')}>Dołącz do sesji</button>
         </div>
       </section>
 

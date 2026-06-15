@@ -10,7 +10,7 @@ export default function LoginPage() {
   const isJoin = mode === 'join'
 
   const [name, setName] = useState('')
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState((params.get('code') ?? '').toUpperCase())
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
