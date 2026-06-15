@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { getSessionResult } from '../services/sessionService'
+import MoviePoster from '../components/ui/MoviePoster'
 import styles from './MatchResultPage.module.css'
 
 const WATCH_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -10,7 +11,6 @@ export default function MatchResultPage() {
   const navigate = useNavigate()
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
-  const [posterError, setPosterError] = useState(false)
 
   useEffect(() => {
     getSessionResult(sessionId)
@@ -53,16 +53,11 @@ export default function MatchResultPage() {
         <p className={styles.matchLabel}>It&apos;s a Match!</p>
 
         <div className={styles.winner}>
-          {movie.poster && !posterError ? (
-            <img
-              className={styles.poster}
-              src={movie.poster}
-              alt={movie.title}
-              onError={() => setPosterError(true)}
-            />
-          ) : (
-            <div className={styles.posterFallback}>🎬</div>
-          )}
+          <MoviePoster
+            src={movie.poster}
+            alt={movie.title}
+            className={styles.poster}
+          />
           <div className={styles.winnerInfo}>
             <h1 className={styles.title}>{movie.title}</h1>
             <p className={styles.meta}>
