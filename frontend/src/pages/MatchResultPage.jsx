@@ -52,18 +52,31 @@ export default function MatchResultPage() {
         <p className={styles.matchLabel}>It&apos;s a Match!</p>
 
         <div className={styles.winner}>
-          {movie.poster && (
+          {movie.poster ? (
             <img className={styles.poster} src={movie.poster} alt={movie.title} />
+          ) : (
+            <div className={styles.posterFallback}>🎬</div>
           )}
           <div className={styles.winnerInfo}>
             <h1 className={styles.title}>{movie.title}</h1>
             <p className={styles.meta}>
               {movie.year} · ⭐ {movie.rating}
             </p>
-            <p className={styles.matchedBy}>
-              Wybrany przez {participants.length}{' '}
-              {participants.length === 1 ? 'osobę' : 'osoby'}
-            </p>
+
+            <div className={styles.matchedByRow}>
+              <div className={styles.avatarStack}>
+                {participants.map((p) => (
+                  <div key={p.id} className={styles.avatar} title={p.name}>
+                    {p.name[0].toUpperCase()}
+                  </div>
+                ))}
+              </div>
+              <p className={styles.matchedBy}>
+                Wybrany przez {participants.length}{' '}
+                {participants.length === 1 ? 'osobę' : 'osoby'}
+              </p>
+            </div>
+
             <div className={styles.watchLinks}>
               <a
                 href={WATCH_URL}
