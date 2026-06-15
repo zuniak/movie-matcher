@@ -19,7 +19,10 @@ export default function ProtectedRoute({ children }) {
 
   const sessionIdMatch = getSessionRouteId(location.pathname)
   const hasJoinedSession = Boolean(session?.id && sessionIdMatch && session.id === sessionIdMatch)
-  const isGuestHostSetup = Boolean(role === 'host' && location.pathname === '/setup')
+  const isGuestHostSetup = Boolean(
+    (role === 'host' || location.state?.role === 'host') &&
+    location.pathname === '/setup'
+  )
 
   if (!user && !hasJoinedSession && !isGuestHostSetup) {
     return <Navigate to="/auth" state={{ from: location }} replace />

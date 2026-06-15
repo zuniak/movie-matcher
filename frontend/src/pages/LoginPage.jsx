@@ -34,7 +34,7 @@ export default function LoginPage() {
         navigate(`/lobby/${result.session.id}`)
       } else {
         setHostSession({ hostName: name.trim() })
-        navigate('/setup')
+        navigate('/setup', { state: { role: 'host' } })
       }
     } catch (err) {
       setError(err.message)
