@@ -9,7 +9,7 @@ const PLATFORM_COLORS = {
   'Prime Video': '#00A8E1',
 }
 
-export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
+export default function MovieCard({ movie, onLike, onSkip, onInfo }) {
   return (
     <article className={styles.card}>
       <div className={styles.posterWrapper}>
@@ -25,11 +25,7 @@ export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
             </span>
           ))}
         </div>
-        {progress && (
-          <span className={styles.progress}>
-            {progress.current} z {progress.total}
-          </span>
-        )}
+
       </div>
 
       <div className={styles.info}>
@@ -89,8 +85,5 @@ MovieCard.propTypes = {
   onLike: PropTypes.func.isRequired,
   onSkip: PropTypes.func.isRequired,
   onInfo: PropTypes.func.isRequired,
-  progress: PropTypes.shape({
-    current: PropTypes.number,
-    total: PropTypes.number,
-  }),
+
 }

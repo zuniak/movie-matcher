@@ -78,25 +78,12 @@ export default function SwipingSessionPage() {
 
   return (
     <div className={`screen ${styles.swiping}`}>
-      <header className={styles.header}>
-        <span className={styles.progress}>
-          {currentIndex + 1} z {movies.length}
-        </span>
-        <div className={styles.progressBar}>
-          <div
-            className={styles.progressFill}
-            style={{ width: `${((currentIndex) / movies.length) * 100}%` }}
-          />
-        </div>
-      </header>
-
       <div className={styles.cardArea}>
         <MovieCard
           movie={current}
           onLike={() => vote('like')}
           onSkip={() => vote('skip')}
           onInfo={() => setDetailMovie(current)}
-          progress={{ current: currentIndex + 1, total: movies.length }}
         />
       </div>
 
