@@ -1,35 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { getSession } from '../services/sessionService'
-import { MOVIES } from '../data/movies'
+import { useEffect } from 'react'
 
 export default function MatchResultPage() {
-  const { sessionId } = useParams()
-  const [error, setError] = useState('')
-
   useEffect(() => {
-    let cancelled = false
-    getSession(sessionId)
-      .then((session) => {
-        if (cancelled) return
-        const movie = MOVIES.find((m) => m.id === session.matchedMovieId)
-        window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      })
-      .catch(() => {
-        if (!cancelled) setError('Nie udało się załadować sesji.')
-      })
-    return () => { cancelled = true }
-  }, [sessionId])
-
-  if (error) {
-    return (
-      <div style={{ padding: '40px 24px', textAlign: 'center' }}>
-        <p style={{ fontSize: '32px', marginBottom: '16px' }}>😕</p>
-        <p style={{ fontWeight: 700, marginBottom: '8px' }}>Ups!</p>
-        <p style={{ color: '#666' }}>{error}</p>
-      </div>
-    )
-  }
+    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  }, [])
 
   return (
     <div style={{ padding: '40px 24px', textAlign: 'center' }}>

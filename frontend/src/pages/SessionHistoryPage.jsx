@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { MOVIES } from '../data/movies'
+import { fetchMovieById } from '../services/movieService'
 import { getSessionHistory } from '../services/sessionHistoryService'
 import SessionHistoryCard from '../components/SessionHistoryCard'
 import styles from './SessionHistoryPage.module.css'
@@ -12,9 +12,17 @@ export default function SessionHistoryPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [history, setHistory] = useState([])
+  const [movieMap, setMovieMap] = useState({})
 
   useEffect(() => {
-    setHistory(getSessionHistory(user ?? MOCK_USER))
+    const sessions = getSessionHistory(user ?? MOCK_USER)
+    setHistory(sessions)
+
+    const ids = [...new Set(sessions.map((s) => s.matchedMovieId).filter(Boolean))]
+    if (ids.length === 0) return
+
+    Promise.all(ids.map((id) => fetchMovieById(id).then((m) => [id, m]).catch(() => [id, null])))
+      .then((entries) => setMovieMap(Object.fromEntries(entries.filter(([, m]) => m))))
   }, [user])
 
   const handleCreate = () => navigate('/setup')
@@ -46,7 +54,7 @@ export default function SessionHistoryPage() {
       ) : (
         <div className={styles.historyList}>
           {history.map((session) => {
-            const movie = MOVIES.find((item) => item.id === session.matchedMovieId)
+            const movie = movieMap[session.matchedMovieId] ?? null
             const handleClick = () => {
               if (session.status === 'finished' && movie) {
                 window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')

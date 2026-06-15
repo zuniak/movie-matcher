@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { useAuth } from '../hooks/useAuth'
 import { createSession } from '../services/sessionService'
-import { addSessionHistory, pickMovieForFilters } from '../services/sessionHistoryService'
-import { GENRES, PLATFORMS } from '../data/movies'
+import { addSessionHistory } from '../services/sessionHistoryService'
+import { GENRES, PLATFORMS } from '../data/constants'
 import styles from './SetupSessionPage.module.css'
 
 const PLATFORM_LIST = Object.values(PLATFORMS)
@@ -59,13 +59,12 @@ export default function SetupSessionPage() {
       })
       setHostSession(created)
 
-      const predictedMovie = pickMovieForFilters(filters)
       addSessionHistory(user, {
         id: created.id,
         name: created.name,
         code: created.id,
         status: 'pending',
-        matchedMovieId: predictedMovie?.id ?? null,
+        matchedMovieId: null,
         participants: 1,
         createdAt: Date.now(),
         tags: [...selectedGenres, ...selectedPlatforms],
