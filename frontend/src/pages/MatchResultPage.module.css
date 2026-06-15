@@ -2,6 +2,7 @@
   background: linear-gradient(160deg, #1a0533 0%, #0d0d0d 100%);
   color: #fff;
   overflow: hidden;
+  position: relative;
 }
 
 .loading {
@@ -25,7 +26,7 @@
 
 /* ── confetti ── */
 .confetti {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
