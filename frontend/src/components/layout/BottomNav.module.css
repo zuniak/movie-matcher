@@ -8,11 +8,7 @@
   background: var(--color-surface);
   border-top: 1px solid rgba(17, 17, 17, 0.08);
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
+  flex-shrink: 0;
 }
 
 .bottomNav__link {

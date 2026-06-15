@@ -20,7 +20,7 @@ export default function SessionHistoryPage() {
   const handleCreate = () => navigate('/setup')
 
   return (
-    <div className={`screen ${styles.historyPage}`}>
+    <div className={styles.historyPage}>
       <header className={styles.pageHeader}>
         <span className={styles.brand}>MOVIEMATCH</span>
         <div className={styles.avatarSmall}>{user?.displayName?.charAt(0).toUpperCase() ?? 'A'}</div>

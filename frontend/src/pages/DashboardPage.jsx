@@ -24,7 +24,7 @@ export default function DashboardPage() {
   const openSessionPath = session?.status === 'active' ? `/session/${session.id}` : session?.status === 'waiting' ? `/lobby/${session.id}` : null
 
   return (
-    <div className={`screen ${styles.dashboard}`}>
+    <div className={styles.dashboard}>
       <header className={styles.pageHeader}>
         <div>
           <span className={styles.brand}>MOVIEMATCH</span>

@@ -78,7 +78,7 @@ export default function SetupSessionPage() {
   }
 
   return (
-    <div className={`screen ${styles.setup}`}>
+    <div className={styles.setup}>
       <header className={styles.header}>
         <button className={styles.back} onClick={() => navigate(-1)}>
           ← Powrót

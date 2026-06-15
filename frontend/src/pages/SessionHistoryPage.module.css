@@ -1,5 +1,4 @@
 .historyPage {
-  min-height: calc(100dvh - 90px);
   padding: 24px 16px 32px;
   background: radial-gradient(circle at top left, rgba(233, 9, 20, 0.08), transparent 26%),
     #f7f5f2;

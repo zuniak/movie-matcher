@@ -57,7 +57,7 @@ export default function MovieCatalogPage() {
       : 'Brak aktywnych filtrów'
 
   return (
-    <div className={`screen ${styles.catalog}`}>
+    <div className={styles.catalog}>
       <header className={styles.pageHeader}>
         <div>
           <span className={styles.brand}>MOVIEMATCH</span>

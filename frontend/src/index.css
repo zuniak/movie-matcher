@@ -52,16 +52,17 @@ body {
 }
 
 .app-layout {
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: var(--color-bg);
+  overflow: hidden;
 }
 
 .app-layout__content {
   width: 100%;
   max-width: var(--max-width);
   flex: 1;
-  padding-bottom: 90px;
+  overflow-y: auto;
 }
