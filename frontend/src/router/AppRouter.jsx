@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AnalyticsListener from '../components/AnalyticsListener'
 import AppLayout from '../components/layout/AppLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -61,7 +61,7 @@ export default function AppRouter() {
         <Route path="/session/:sessionId/result" element={<MatchResultPage />} />
 
         {/* 404 fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
