@@ -119,3 +119,39 @@ Splash → Login → Setup Session → Lobby → Swiping → Match Result
 Dashboard → Session History
          → User Profile
 ```
+
+## Wdrożenie i Analityka
+
+Aplikacja została wdrożona w modelu monolitycznym (serwer Express serwujący statyczne pliki React SPA) na platformie **Railway**:
+- URL produkcyjny: [https://movie-matcher-production.up.railway.app](https://movie-matcher-production.up.railway.app)
+
+### Integracje i Śledzenie Ruchu
+
+Aplikacja posiada zintegrowane dwa wiodące narzędzia analityczne pozwalające badać zachowanie użytkowników w czasie rzeczywistym i analizować ich ścieżki:
+
+1. **Google Analytics 4 (GA4)**:
+   - Śledzenie odsłon zintegrowane z routerem React Router (`react-ga4` + dedykowany `AnalyticsListener`).
+   - Dynamiczny pomiar aktywnych użytkowników na podstronach SPA (`/dashboard`, `/history`, `/setup` itp.).
+2. **Contentsquare (Hotjar)**:
+   - Nagrania wideo z sesji użytkowników (Session Replay) oraz mapy cieplne.
+   - Monitorowanie wskaźników wydajnościowych (LCP, Bounce Rate).
+
+---
+
+### Zrzuty ekranu z działania i analityki
+
+#### 1. Panel Contentsquare (Hotjar)
+Zrzut ekranu prezentuje przetworzone sesje użytkowników z wskaźnikami czasu trwania sesji oraz Core Web Vitals:
+
+![Panel Contentsquare](./docs/images/contentsquare_dashboard.png)
+
+#### 2. Panel Google Analytics 4 (GA4)
+Zrzut ekranu pokazuje sekcję Czasu Rzeczywistego w GA4, rejestrującą aktywnych użytkowników oraz odsłony podstron SPA:
+
+![Panel Google Analytics 4](./docs/images/ga4_dashboard.png)
+
+#### 3. Interfejs Aplikacji (Movie Matcher)
+Poniższe zrzuty prezentują wygląd aplikacji:
+
+![Ekran Główny Aplikacji](./docs/images/app_screenshot.png)
+![Ekran Swipowania](./docs/images/app_swiping.png)
