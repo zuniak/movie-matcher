@@ -66,7 +66,7 @@ export default function LoginPage() {
             <input
               className={styles.input}
               type="text"
-              placeholder="np. Zuzia"
+              placeholder="np. Zuza"
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={30}
