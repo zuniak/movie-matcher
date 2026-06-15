@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
@@ -19,6 +19,8 @@ function validatePassword(val) {
   return ''
 }
 
+const DEBOUNCE_MS = 500
+
 export default function AuthPage() {
   const { user } = useAuth()
   const [email, setEmail] = useState('')
@@ -27,6 +29,7 @@ export default function AuthPage() {
   const [touched, setTouched] = useState({ email: false, password: false })
   const [submitError, setSubmitError] = useState('')
   const [loading, setLoading] = useState(false)
+  const timers = useRef({})
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/dashboard'
@@ -35,21 +38,26 @@ export default function AuthPage() {
     if (user) navigate(from, { replace: true })
   }, [user, navigate, from])
 
-  const touch = (field) => setTouched((t) => ({ ...t, [field]: true }))
+  useEffect(() => () => Object.values(timers.current).forEach(clearTimeout), [])
 
-  const handleEmailChange = (val) => {
-    setEmail(val)
-    if (touched.email) setFieldErrors((e) => ({ ...e, email: validateEmail(val) }))
+  const scheduleValidate = (field, value, fn) => {
+    clearTimeout(timers.current[field])
+    timers.current[field] = setTimeout(() => {
+      setTouched((t) => ({ ...t, [field]: true }))
+      setFieldErrors((e) => ({ ...e, [field]: fn(value) }))
+    }, DEBOUNCE_MS)
   }
 
-  const handlePasswordChange = (val) => {
-    setPassword(val)
-    if (touched.password) setFieldErrors((e) => ({ ...e, password: validatePassword(val) }))
+  const commitValidate = (field, value, fn) => {
+    clearTimeout(timers.current[field])
+    setTouched((t) => ({ ...t, [field]: true }))
+    setFieldErrors((e) => ({ ...e, [field]: fn(value) }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitError('')
+    Object.values(timers.current).forEach(clearTimeout)
     const errors = { email: validateEmail(email), password: validatePassword(password) }
     setFieldErrors(errors)
     setTouched({ email: true, password: true })
@@ -84,8 +92,8 @@ export default function AuthPage() {
               type="email"
               placeholder="twoj@email.com"
               value={email}
-              onChange={(e) => handleEmailChange(e.target.value)}
-              onBlur={() => { touch('email'); setFieldErrors((err) => ({ ...err, email: validateEmail(email) })) }}
+              onChange={(e) => { setEmail(e.target.value); scheduleValidate('email', e.target.value, validateEmail) }}
+              onBlur={() => commitValidate('email', email, validateEmail)}
               autoFocus
             />
             {touched.email && fieldErrors.email && <p className={styles.fieldError}>{fieldErrors.email}</p>}
@@ -98,8 +106,8 @@ export default function AuthPage() {
               type="password"
               placeholder="min. 6 znaków"
               value={password}
-              onChange={(e) => handlePasswordChange(e.target.value)}
-              onBlur={() => { touch('password'); setFieldErrors((err) => ({ ...err, password: validatePassword(password) })) }}
+              onChange={(e) => { setPassword(e.target.value); scheduleValidate('password', e.target.value, validatePassword) }}
+              onBlur={() => commitValidate('password', password, validatePassword)}
             />
             {touched.password && fieldErrors.password && <p className={styles.fieldError}>{fieldErrors.password}</p>}
           </div>

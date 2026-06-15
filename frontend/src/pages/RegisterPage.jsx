@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../firebase'
@@ -7,6 +7,7 @@ import { getAuthError } from '../utils/firebaseError'
 import styles from './RegisterPage.module.css'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const DEBOUNCE_MS = 500
 
 const validators = {
   firstName: (v) => (!v.trim() ? 'Podaj swoje imię.' : ''),
@@ -34,41 +35,50 @@ export default function RegisterPage() {
   const [touched, setTouched] = useState({ firstName: false, email: false, password: false, confirmPassword: false })
   const [submitError, setSubmitError] = useState('')
   const [loading, setLoading] = useState(false)
+  const timers = useRef({})
   const navigate = useNavigate()
 
   useEffect(() => {
     if (user) navigate('/dashboard')
   }, [user, navigate])
 
-  const touch = (field) => setTouched((t) => ({ ...t, [field]: true }))
+  useEffect(() => () => Object.values(timers.current).forEach(clearTimeout), [])
 
-  const validate = (field, value) =>
-    field === 'confirmPassword'
-      ? validators.confirmPassword(value, fields.password)
+  const scheduleValidate = (field, value, currentFields) => {
+    clearTimeout(timers.current[field])
+    timers.current[field] = setTimeout(() => {
+      const err = field === 'confirmPassword'
+        ? validators.confirmPassword(value, currentFields.password)
+        : validators[field](value)
+      setTouched((t) => ({ ...t, [field]: true }))
+      setFieldErrors((e) => ({ ...e, [field]: err }))
+    }, DEBOUNCE_MS)
+  }
+
+  const commitValidate = (field, currentFields) => {
+    clearTimeout(timers.current[field])
+    const value = currentFields[field]
+    const err = field === 'confirmPassword'
+      ? validators.confirmPassword(value, currentFields.password)
       : validators[field](value)
+    setTouched((t) => ({ ...t, [field]: true }))
+    setFieldErrors((e) => ({ ...e, [field]: err }))
+  }
 
   const handleChange = (field, value) => {
     const updated = { ...fields, [field]: value }
     setFields(updated)
-    if (touched[field]) {
-      const err = field === 'confirmPassword'
-        ? validators.confirmPassword(value, updated.password)
-        : validators[field](value)
-      setFieldErrors((e) => ({ ...e, [field]: err }))
-      if (field === 'password' && touched.confirmPassword) {
-        setFieldErrors((e) => ({ ...e, confirmPassword: validators.confirmPassword(updated.confirmPassword, value) }))
-      }
+    scheduleValidate(field, value, updated)
+    // when password changes, also re-schedule confirmPassword if it's been touched
+    if (field === 'password' && touched.confirmPassword) {
+      scheduleValidate('confirmPassword', updated.confirmPassword, updated)
     }
-  }
-
-  const handleBlur = (field) => {
-    touch(field)
-    setFieldErrors((e) => ({ ...e, [field]: validate(field, fields[field]) }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitError('')
+    Object.values(timers.current).forEach(clearTimeout)
     const errors = {
       firstName: validators.firstName(fields.firstName),
       email: validators.email(fields.email),
@@ -90,7 +100,7 @@ export default function RegisterPage() {
     }
   }
 
-  const field = (name, label, type = 'text', placeholder = '') => (
+  const renderField = (name, label, type = 'text', placeholder = '') => (
     <div className={styles.field}>
       <label className={styles.label}>{label}</label>
       <input
@@ -99,7 +109,7 @@ export default function RegisterPage() {
         placeholder={placeholder}
         value={fields[name]}
         onChange={(e) => handleChange(name, e.target.value)}
-        onBlur={() => handleBlur(name)}
+        onBlur={() => commitValidate(name, fields)}
         autoFocus={name === 'firstName'}
       />
       {touched[name] && fieldErrors[name] && <p className={styles.fieldError}>{fieldErrors[name]}</p>}
@@ -118,10 +128,10 @@ export default function RegisterPage() {
         <p className={styles.subtitle}>Utwórz nowe konto</p>
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          {field('firstName', 'Imię', 'text', 'np. Zuza')}
-          {field('email', 'Email', 'email', 'twoj@email.com')}
-          {field('password', 'Hasło', 'password', 'min. 6 znaków')}
-          {field('confirmPassword', 'Powtórz hasło', 'password', 'powtórz hasło')}
+          {renderField('firstName', 'Imię', 'text', 'np. Zuza')}
+          {renderField('email', 'Email', 'email', 'twoj@email.com')}
+          {renderField('password', 'Hasło', 'password', 'min. 6 znaków')}
+          {renderField('confirmPassword', 'Powtórz hasło', 'password', 'powtórz hasło')}
 
           {submitError && <p className={styles.error}>{submitError}</p>}
 
