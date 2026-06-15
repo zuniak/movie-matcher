@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useSession } from '../hooks/useSession'
 import { MOVIES } from '../data/movies'
+import MoviePoster from '../components/ui/MoviePoster'
 import styles from './DashboardPage.module.css'
 
 const suggested = MOVIES.slice(0, 3)
@@ -92,10 +93,8 @@ export default function DashboardPage() {
         <div className={styles.suggestedGrid}>
           {suggested.map((movie) => (
             <article key={movie.id} className={styles.suggestedCard}>
-              <div
-                className={styles.suggestedImage}
-                style={{ backgroundImage: `url(${movie.poster})` }}
-              >
+              <div className={styles.suggestedImage}>
+                <MoviePoster src={movie.poster} alt={movie.title} className={styles.suggestedPoster} />
                 <span className={styles.suggestedBadge}>{movie.platforms[0]}</span>
               </div>
               <div className={styles.suggestedCopy}>

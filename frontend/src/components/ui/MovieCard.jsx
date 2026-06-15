@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import MoviePoster from './MoviePoster'
 import styles from './MovieCard.module.css'
 
 const PLATFORM_COLORS = {
@@ -12,7 +13,7 @@ export default function MovieCard({ movie, onLike, onSkip, onInfo, progress }) {
   return (
     <article className={styles.card}>
       <div className={styles.posterWrapper}>
-        <img className={styles.poster} src={movie.poster} alt={movie.title} loading="lazy" />
+        <MoviePoster src={movie.poster} alt={movie.title} className={styles.poster} />
         <div className={styles.platforms}>
           {movie.platforms.map((p) => (
             <span

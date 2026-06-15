@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MOVIES } from '../data/movies'
+import MoviePoster from '../components/ui/MoviePoster'
 import styles from './MovieCatalogPage.module.css'
 
 const ALL_GENRES = Array.from(new Set(MOVIES.flatMap((movie) => movie.genre)))
@@ -150,7 +151,7 @@ export default function MovieCatalogPage() {
           {filteredMovies.map((movie) => (
             <article key={movie.id} className={styles.movieCard}>
               <div className={styles.posterWrapper}>
-                <img src={movie.poster} alt={movie.title} className={styles.posterImage} />
+                <MoviePoster src={movie.poster} alt={movie.title} className={styles.posterImage} />
               </div>
               <div className={styles.movieInfo}>
                 <div className={styles.movieHeader}>

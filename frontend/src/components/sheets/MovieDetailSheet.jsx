@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import MoviePoster from '../ui/MoviePoster'
 import styles from './MovieDetailSheet.module.css'
 
 const PLATFORM_COLORS = {
@@ -18,7 +19,7 @@ export default function MovieDetailSheet({ movie, onClose }) {
         <div className={styles.handle} />
         <div className={styles.content}>
           <div className={styles.top}>
-            <img className={styles.poster} src={movie.poster} alt={movie.title} loading="lazy" />
+            <MoviePoster src={movie.poster} alt={movie.title} className={styles.poster} />
             <div className={styles.meta}>
               <h2 className={styles.title}>{movie.title}</h2>
               <p className={styles.year}>
