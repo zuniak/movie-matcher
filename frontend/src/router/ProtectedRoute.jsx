@@ -10,7 +10,7 @@ function getSessionRouteId(pathname) {
 
 export default function ProtectedRoute({ children }) {
   const { user, isLoading } = useAuth()
-  const { session } = useSession()
+  const { session, role } = useSession()
   const location = useLocation()
 
   if (isLoading) {
@@ -19,8 +19,9 @@ export default function ProtectedRoute({ children }) {
 
   const sessionIdMatch = getSessionRouteId(location.pathname)
   const hasJoinedSession = Boolean(session?.id && sessionIdMatch && session.id === sessionIdMatch)
+  const isGuestHostSetup = Boolean(role === 'host' && location.pathname === '/setup')
 
-  if (!user && !hasJoinedSession) {
+  if (!user && !hasJoinedSession && !isGuestHostSetup) {
     return <Navigate to="/auth" state={{ from: location }} replace />
   }
 
