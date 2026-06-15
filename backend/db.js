@@ -22,13 +22,12 @@ export const db = {
 
   createSession({ hostName, name, filters }) {
     const id = generateCode()
-    const movies = this.getMovies(filters)
     sessions[id] = {
       id,
       name,
       status: 'waiting',
       filters,
-      movies: movies.map((m) => m.id),
+      movies: MOVIES.map((m) => m.id),
       participants: [{ id: 'host', name: hostName, role: 'host' }],
       votes: {},
       createdAt: Date.now(),

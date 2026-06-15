@@ -47,18 +47,21 @@ export default function SessionHistoryPage() {
         <div className={styles.historyList}>
           {history.map((session) => {
             const movie = MOVIES.find((item) => item.id === session.matchedMovieId)
-            const targetPath =
-              session.status === 'finished'
-                ? `/session/${session.id}/result`
-                : session.status === 'active'
-                ? `/session/${session.id}`
-                : `/lobby/${session.id}`
+            const handleClick = () => {
+              if (session.status === 'finished' && movie) {
+                window.open(Object.values(movie.watchUrls)[0], '_blank')
+              } else if (session.status === 'active') {
+                navigate(`/session/${session.id}`)
+              } else {
+                navigate(`/lobby/${session.id}`)
+              }
+            }
             return (
               <SessionHistoryCard
                 key={session.id}
                 session={session}
                 movie={movie}
-                onClick={() => navigate(targetPath)}
+                onClick={handleClick}
               />
             )
           })}
