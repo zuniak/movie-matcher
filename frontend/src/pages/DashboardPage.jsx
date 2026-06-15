@@ -92,7 +92,13 @@ export default function DashboardPage() {
 
         <div className={styles.suggestedGrid}>
           {suggested.map((movie) => (
-            <article key={movie.id} className={styles.suggestedCard}>
+            <a
+              key={movie.id}
+              className={styles.suggestedCard}
+              href={Object.values(movie.watchUrls)[0]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className={styles.suggestedImage}>
                 <MoviePoster src={movie.poster} alt={movie.title} className={styles.suggestedPoster} />
                 <span className={styles.suggestedBadge}>{movie.platforms[0]}</span>
@@ -103,7 +109,7 @@ export default function DashboardPage() {
                   {movie.genre.join(' • ')} • {movie.year}
                 </p>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </section>

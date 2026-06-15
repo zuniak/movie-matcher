@@ -188,6 +188,8 @@
 .suggestedCard {
   display: grid;
   gap: 12px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .suggestedImage {
