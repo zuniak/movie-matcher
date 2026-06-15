@@ -35,18 +35,11 @@ export default function LobbyPage() {
   }, [fetchSession])
 
   const joinUrl = `${window.location.origin}/login?mode=join&code=${sessionId}`
-  const [copiedLink, setCopiedLink] = useState(false)
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(sessionId)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(joinUrl)
-    setCopiedLink(true)
-    setTimeout(() => setCopiedLink(false), 2000)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const handleStart = async () => {
@@ -93,11 +86,8 @@ export default function LobbyPage() {
       <div className={styles.codeBox}>
         <p className={styles.codeLabel}>Kod sesji</p>
         <p className={styles.code}>{sessionId}</p>
-        <button className={styles.copyBtn} onClick={handleCopyCode}>
-          {copied ? '✓ Skopiowano' : 'Kopiuj kod'}
-        </button>
         <button className={styles.copyBtn} onClick={handleCopyLink}>
-          {copiedLink ? '✓ Skopiowano' : 'Kopiuj link zaproszenia'}
+          {copied ? '✓ Skopiowano' : 'Kopiuj link zaproszenia'}
         </button>
       </div>
 

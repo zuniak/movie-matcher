@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import confetti from 'canvas-confetti'
 import { getSession } from '../services/sessionService'
 import { fetchMovieById } from '../services/movieService'
 import MoviePoster from '../components/ui/MoviePoster'
@@ -25,6 +26,17 @@ export default function MatchResultPage() {
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [sessionId])
+
+  useEffect(() => {
+    if (loading) return
+    const end = Date.now() + 2500
+    const colors = ['#e60914', '#ffffff', '#ffcc00'];
+    (function frame() {
+      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors })
+      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors })
+      if (Date.now() < end) requestAnimationFrame(frame)
+    })()
+  }, [loading])
 
   if (loading) {
     return (
