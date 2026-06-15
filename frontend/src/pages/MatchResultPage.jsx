@@ -77,16 +77,16 @@ export default function MatchResultPage() {
                 {participants.length === 1 ? 'osobę' : 'osoby'}
               </p>
             </div>
-          </div>
 
-          <a
-            href={WATCH_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.watchBtn}
-          >
-            Oglądaj teraz →
-          </a>
+            <a
+              href={WATCH_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.watchBtn}
+            >
+              Oglądaj teraz →
+            </a>
+          </div>
         </div>
 
         {contenders && contenders.length > 0 && (
