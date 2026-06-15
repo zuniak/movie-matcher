@@ -26,17 +26,12 @@ export function AuthProvider({ children }) {
     return () => unsubscribe()
   }, [])
 
-  const login = (userData) => {
-    setUser(userData)
-  }
-
   const logout = async () => {
     await signOut(auth)
-    setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import styles from './BottomNav.module.css'
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Start', icon: '🏠' },
@@ -9,16 +10,16 @@ const NAV_ITEMS = [
 
 export default function BottomNav() {
   return (
-    <nav className="bottomNav">
+    <nav className={styles.bottomNav}>
       {NAV_ITEMS.map(({ to, label, icon }) => (
         <NavLink
           key={to}
           to={to}
           className={({ isActive }) =>
-            `bottomNav__link ${isActive ? 'bottomNav__link--active' : ''}`
+            `${styles['bottomNav__link']} ${isActive ? styles['bottomNav__link--active'] : ''}`
           }
         >
-          <span className="bottomNav__icon" aria-hidden="true">
+          <span className={styles['bottomNav__icon']} aria-hidden="true">
             {icon}
           </span>
           <span>{label}</span>
