@@ -8,7 +8,7 @@ import SplashPage from '../pages/SplashPage'
 import LoginPage from '../pages/LoginPage'
 import AuthPage from '../pages/AuthPage'
 import RegisterPage from '../pages/RegisterPage'
-import NotFoundPage from '../pages/NotFoundPage'
+
 
 import SetupSessionPage from '../pages/SetupSessionPage'
 import DashboardPage from '../pages/DashboardPage'
@@ -43,17 +43,8 @@ export default function AppRouter() {
           <Route path="/setup" element={<SetupSessionPage />} />
           <Route path="/catalog" element={<MovieCatalogPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/history" element={<SessionHistoryPage />} />
         </Route>
-
-        {/* history can use mock fallback for dev so it loads even when auth/origin is inconsistent */}
-        <Route
-          path="/history"
-          element={
-            <AppLayout>
-              <SessionHistoryPage />
-            </AppLayout>
-          }
-        />
 
         {/* public — accessible to guests who joined via code */}
         <Route path="/lobby/:sessionId" element={<LobbyPage />} />
