@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { useAuth } from '../hooks/useAuth'
 import { createSession } from '../services/sessionService'
-import { addSessionHistory, pickMovieForFilters } from '../services/sessionHistoryService'
-import { GENRES, PLATFORMS } from '../data/movies'
+import { addSessionHistory } from '../services/sessionHistoryService'
+import { GENRES, PLATFORMS } from '../data/constants'
 import styles from './SetupSessionPage.module.css'
 
 const PLATFORM_LIST = Object.values(PLATFORMS)
 const GENRE_LIST = Object.values(GENRES)
+const MIN_YEAR = 1970
+const MAX_YEAR = new Date().getFullYear()
 
 const PLATFORM_COLORS = {
   Netflix: '#E60914',
@@ -27,7 +29,7 @@ export default function SetupSessionPage() {
   const [selectedGenres, setSelectedGenres] = useState([])
   const [selectedPlatforms, setSelectedPlatforms] = useState([])
   const [yearFrom, setYearFrom] = useState(1990)
-  const [yearTo] = useState(new Date().getFullYear())
+  const [yearTo, setYearTo] = useState(new Date().getFullYear())
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -51,25 +53,24 @@ export default function SetupSessionPage() {
         type: contentType,
       }
       const created = await createSession({
-        hostName: sessionState?.hostName ?? 'Host',
+        hostName: user?.displayName ?? 'Host',
         name: sessionName || 'Wieczór filmowy',
         filters,
       })
       setHostSession(created)
 
-      const predictedMovie = pickMovieForFilters(filters)
       addSessionHistory(user, {
         id: created.id,
         name: created.name,
         code: created.id,
         status: 'pending',
-        matchedMovieId: predictedMovie?.id ?? null,
+        matchedMovieId: null,
         participants: 1,
         createdAt: Date.now(),
         tags: [...selectedGenres, ...selectedPlatforms],
       })
 
-      navigate(`/session/${created.id}`)
+      navigate(`/lobby/${created.id}`)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -78,7 +79,7 @@ export default function SetupSessionPage() {
   }
 
   return (
-    <div className={`screen ${styles.setup}`}>
+    <div className={styles.setup}>
       <header className={styles.header}>
         <button className={styles.back} onClick={() => navigate(-1)}>
           ← Powrót
@@ -137,18 +138,40 @@ export default function SetupSessionPage() {
         <section className={styles.section}>
           <div className={styles.sliderHeader}>
             <label className={styles.sectionLabel}>Rok produkcji</label>
-            <span className={styles.sliderValue}>
-              {yearFrom} — {yearTo}
-            </span>
+            <span className={styles.sliderValue}>{yearFrom} — {yearTo}</span>
           </div>
-          <input
-            className={styles.slider}
-            type="range"
-            min={1970}
-            max={yearTo}
-            value={yearFrom}
-            onChange={(e) => setYearFrom(Number(e.target.value))}
-          />
+          <div className={styles.rangeWrapper}>
+            <div
+              className={styles.rangeTrack}
+              style={{
+                background: `linear-gradient(to right,
+                  #ddd 0%,
+                  #ddd ${((yearFrom - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100}%,
+                  var(--color-purple) ${((yearFrom - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100}%,
+                  var(--color-purple) ${((yearTo - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100}%,
+                  #ddd ${((yearTo - MIN_YEAR) / (MAX_YEAR - MIN_YEAR)) * 100}%,
+                  #ddd 100%)`
+              }}
+            />
+            <input
+              type="range"
+              className={styles.rangeInput}
+              style={{ zIndex: yearFrom >= yearTo - 1 ? 5 : 3 }}
+              min={MIN_YEAR}
+              max={MAX_YEAR}
+              value={yearFrom}
+              onChange={(e) => setYearFrom(Math.min(Number(e.target.value), yearTo - 1))}
+            />
+            <input
+              type="range"
+              className={styles.rangeInput}
+              style={{ zIndex: 4 }}
+              min={MIN_YEAR}
+              max={MAX_YEAR}
+              value={yearTo}
+              onChange={(e) => setYearTo(Math.max(Number(e.target.value), yearFrom + 1))}
+            />
+          </div>
         </section>
 
         <section className={styles.section}>

@@ -14,11 +14,7 @@ export default function ProtectedRoute({ children }) {
   const location = useLocation()
 
   if (isLoading) {
-    return (
-      <div className="screen" style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-        <p>Ładowanie...</p>
-      </div>
-    )
+    return null
   }
 
   const sessionIdMatch = getSessionRouteId(location.pathname)

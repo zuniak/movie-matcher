@@ -1,10 +1,28 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import styles from './UserProfilePage.module.css'
 
+function useSetting(key, defaultValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key)
+    return stored !== null ? JSON.parse(stored) : defaultValue
+  })
+  const toggle = () => {
+    setValue((prev) => {
+      const next = !prev
+      localStorage.setItem(key, JSON.stringify(next))
+      return next
+    })
+  }
+  return [value, toggle]
+}
+
 export default function UserProfilePage() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const [notifications, toggleNotifications] = useSetting('mm_notifications', true)
+  const [autoSave, toggleAutoSave] = useSetting('mm_autosave', false)
 
   const displayName = user?.displayName ?? 'John Doe'
   const email = user?.email ?? 'john.doe@cinema.io'
@@ -16,7 +34,7 @@ export default function UserProfilePage() {
     .toUpperCase()
 
   return (
-    <div className={`screen ${styles.profile}`}>
+    <div className={styles.profile}>
       <div className={styles.card}>
         <div className={styles.topRow}>
           <span className={styles.brand}>MOVIEMATCH</span>
@@ -47,7 +65,7 @@ export default function UserProfilePage() {
           <label className={styles.settingRow}>
             <span>Powiadomienia</span>
             <span className={styles.switch}>
-              <input type="checkbox" defaultChecked />
+              <input type="checkbox" checked={notifications} onChange={toggleNotifications} />
               <span className={styles.slider} />
             </span>
           </label>
@@ -55,7 +73,7 @@ export default function UserProfilePage() {
           <label className={styles.settingRow}>
             <span>Automatyczne zapisywanie</span>
             <span className={styles.switch}>
-              <input type="checkbox" />
+              <input type="checkbox" checked={autoSave} onChange={toggleAutoSave} />
               <span className={styles.slider} />
             </span>
           </label>

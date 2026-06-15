@@ -1,5 +1,4 @@
 .historyPage {
-  min-height: calc(100dvh - 90px);
   padding: 24px 16px 32px;
   background: radial-gradient(circle at top left, rgba(233, 9, 20, 0.08), transparent 26%),
     #f7f5f2;
@@ -136,8 +135,10 @@
   min-height: 220px;
   border-radius: 28px;
   overflow: hidden;
-  background: #f4f4f4;
+  background: #1a1a1a;
   box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.04);
+  display: flex;
+  flex-direction: column;
 }
 
 .posterImage {
@@ -148,11 +149,28 @@
 }
 
 .posterPlaceholder {
+  flex: 1;
   min-height: 220px;
-  display: grid;
-  place-items: center;
-  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(160deg, #2e2e2e, #1a1a1a);
   padding: 16px;
+}
+
+.posterPlaceholderIcon {
+  font-size: 38px;
+  opacity: 0.75;
+}
+
+.posterPlaceholderTitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .cardMeta {

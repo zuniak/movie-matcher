@@ -1,7 +1,6 @@
-import { MOVIES } from '../data/movies'
 import { MOCK_SESSIONS } from './sessionService'
 
-const STORAGE_PREFIX = 'movie-matcher-history:'
+const STORAGE_PREFIX = 'movie-matcher-history-v2:'
 
 function storageKey(user) {
   if (!user) return null
@@ -71,24 +70,4 @@ export function addSessionHistory(user, session) {
   const next = [normalizeSession(session), ...current]
   writeStorage(key, next)
   return next
-}
-
-export function findMovieById(movieId) {
-  return MOVIES.find((movie) => movie.id === movieId) || null
-}
-
-export function pickMovieForFilters(filters) {
-  const candidate = MOVIES.find((movie) => {
-    const matchesPlatform =
-      !filters.platforms?.length ||
-      movie.platforms.some((platform) => filters.platforms.includes(platform))
-    const matchesGenre =
-      !filters.genres?.length ||
-      filters.genres.every((genre) => movie.genre.includes(genre))
-    const matchesYear =
-      (!filters.yearFrom || movie.year >= filters.yearFrom) &&
-      (!filters.yearTo || movie.year <= filters.yearTo)
-    return matchesPlatform && matchesGenre && matchesYear
-  })
-  return candidate || MOVIES[0] || null
 }

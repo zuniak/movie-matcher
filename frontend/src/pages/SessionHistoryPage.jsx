@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { MOVIES } from '../data/movies'
+import { fetchMovieById } from '../services/movieService'
 import { getSessionHistory } from '../services/sessionHistoryService'
 import SessionHistoryCard from '../components/SessionHistoryCard'
 import styles from './SessionHistoryPage.module.css'
@@ -12,15 +12,23 @@ export default function SessionHistoryPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [history, setHistory] = useState([])
+  const [movieMap, setMovieMap] = useState({})
 
   useEffect(() => {
-    setHistory(getSessionHistory(user ?? MOCK_USER))
+    const sessions = getSessionHistory(user ?? MOCK_USER)
+    setHistory(sessions)
+
+    const ids = [...new Set(sessions.map((s) => s.matchedMovieId).filter(Boolean))]
+    if (ids.length === 0) return
+
+    Promise.all(ids.map((id) => fetchMovieById(id).then((m) => [id, m]).catch(() => [id, null])))
+      .then((entries) => setMovieMap(Object.fromEntries(entries.filter(([, m]) => m))))
   }, [user])
 
   const handleCreate = () => navigate('/setup')
 
   return (
-    <div className={`screen ${styles.historyPage}`}>
+    <div className={styles.historyPage}>
       <header className={styles.pageHeader}>
         <span className={styles.brand}>MOVIEMATCH</span>
         <div className={styles.avatarSmall}>{user?.displayName?.charAt(0).toUpperCase() ?? 'A'}</div>
@@ -46,19 +54,22 @@ export default function SessionHistoryPage() {
       ) : (
         <div className={styles.historyList}>
           {history.map((session) => {
-            const movie = MOVIES.find((item) => item.id === session.matchedMovieId)
-            const targetPath =
-              session.status === 'finished'
-                ? `/session/${session.id}/result`
-                : session.status === 'active'
-                ? `/session/${session.id}`
-                : `/lobby/${session.id}`
+            const movie = movieMap[session.matchedMovieId] ?? null
+            const handleClick = () => {
+              if (session.status === 'finished' && movie) {
+                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')
+              } else if (session.status === 'active') {
+                navigate(`/session/${session.id}`)
+              } else {
+                navigate(`/lobby/${session.id}`)
+              }
+            }
             return (
               <SessionHistoryCard
                 key={session.id}
                 session={session}
                 movie={movie}
-                onClick={() => navigate(targetPath)}
+                onClick={handleClick}
               />
             )
           })}

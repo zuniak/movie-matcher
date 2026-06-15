@@ -1,4 +1,4 @@
-.login {
+.register {
   background: var(--color-surface);
 }
 
@@ -81,6 +81,16 @@
   font-weight: 700;
   font-size: 20px;
   text-transform: uppercase;
+}
+
+.inputError {
+  border-color: var(--color-red);
+}
+
+.fieldError {
+  color: var(--color-red);
+  font-size: 13px;
+  margin-top: 4px;
 }
 
 .error {

@@ -1,0 +1,215 @@
+.result {
+  background: linear-gradient(160deg, #1a0533 0%, #0d0d0d 100%);
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading {
+  margin: auto;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.errorState {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.errorState a {
+  color: var(--color-purple);
+  font-weight: 600;
+}
+
+/* ── confetti ── */
+.confetti {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.confettiPiece {
+  position: absolute;
+  font-size: 24px;
+  animation: fall 3s ease-in infinite;
+  animation-delay: calc(var(--i) * 0.4s);
+  left: calc(10% + var(--i) * 18%);
+  top: -40px;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110dvh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* ── scroll container ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 48px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.matchLabel {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+
+/* ── winner card — horizontal layout ── */
+.winner {
+  display: flex;
+  gap: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px;
+}
+
+.poster {
+  width: 120px;
+  height: 178px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.winnerInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.meta {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.matchedByRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatarStack {
+  display: flex;
+}
+
+.avatarStack .avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-purple);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 2px solid #1a0533;
+  margin-left: -6px;
+}
+
+.avatarStack .avatar:first-child {
+  margin-left: 0;
+}
+
+.matchedBy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.watchBtn {
+  display: block;
+  margin-top: auto;
+  padding: 10px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-red);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* ── contenders (smaller) ── */
+.contenders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contendersLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.contendersList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.contender {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contenderPoster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0.7;
+}
+
+.contenderTitle {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── back button ── */
+.newSessionBtn {
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+}

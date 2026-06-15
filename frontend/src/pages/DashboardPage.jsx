@@ -1,10 +1,10 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useSession } from '../hooks/useSession'
-import { MOVIES } from '../data/movies'
+import { fetchMovies } from '../services/movieService'
+import MoviePoster from '../components/ui/MoviePoster'
 import styles from './DashboardPage.module.css'
-
-const suggested = MOVIES.slice(0, 3)
 
 const recentSessions = [
   { title: 'Family Movie Night', subtitle: 'Matched: Spider-Man: Across the Universe', time: '2d ago' },
@@ -15,6 +15,13 @@ export default function DashboardPage() {
   const { user, logout } = useAuth()
   const { session } = useSession()
   const navigate = useNavigate()
+  const [suggested, setSuggested] = useState([])
+
+  useEffect(() => {
+    fetchMovies()
+      .then((movies) => setSuggested(movies.slice(0, 3)))
+      .catch(() => {})
+  }, [])
 
   const handleLogout = async () => {
     await logout()
@@ -24,61 +31,37 @@ export default function DashboardPage() {
   const openSessionPath = session?.status === 'active' ? `/session/${session.id}` : session?.status === 'waiting' ? `/lobby/${session.id}` : null
 
   return (
-    <div className={`screen ${styles.dashboard}`}>
+    <div className={styles.dashboard}>
       <header className={styles.pageHeader}>
         <div>
           <span className={styles.brand}>MOVIEMATCH</span>
-          <p className={styles.pageLabel}>Przegląd</p>
+          <p className={styles.pageLabel}>PRZEGLĄD</p>
         </div>
-        <div className={styles.avatarSmall} aria-label="User profile">
-          {user?.displayName ? user.displayName.charAt(0).toUpperCase() : 'A'}
-        </div>
+        <button className={styles.avatarSmall} onClick={handleLogout} title="Wyloguj">
+          {user?.displayName?.charAt(0).toUpperCase() ?? 'A'}
+        </button>
       </header>
 
-      <section className={styles.heroCard}>
-        <div className={styles.heroIntro}>
-          <p className={styles.heroKicker}>
-            Witaj ponownie{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}
-          </p>
-          <h1 className={styles.heroTitle}>Gotowy na wieczór filmowy?</h1>
-          <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
-        </div>
-
-        <div className={styles.buttonRow}>
-          <button className={styles.primaryButton} type="button" onClick={() => navigate('/setup')}>
-            Nowa sesja
-          </button>
-          <button
-            className={styles.secondaryButton}
-            type="button"
-            onClick={() =>
-              navigate('/login?mode=join', {
-                state: { returnPath: '/dashboard' },
-              })
-            }
-          >
-            Dołącz do sesji
-          </button>
-        </div>
-
-        {openSessionPath ? (
-          <div className={styles.statusCard}>
-            <div>
-              <p className={styles.sessionCode}>{session.code ?? session.id}</p>
-              <p className={styles.sessionInfo}>
-                {session.participants?.length ?? 1}{' '}
-                {(session.participants?.length ?? 1) === 1 ? 'uczestnik' : 'uczestników'} · {session.status === 'active' ? 'w trakcie' : 'lobby'}
-              </p>
-            </div>
-            <button
-              className={styles.rejoinButton}
-              type="button"
-              onClick={() => navigate(openSessionPath)}
-            >
-              Przejdź do sesji →
-            </button>
+      {openSessionPath && (
+        <section className={styles.statusCard}>
+          <div>
+            <p className={styles.sessionInfo}>Sesja w toku</p>
+            <p className={styles.sessionCode}>{session.name}</p>
           </div>
-        ) : null}
+          <button className={styles.rejoinButton} onClick={() => navigate(openSessionPath)}>
+            Wróć →
+          </button>
+        </section>
+      )}
+
+      <section className={styles.heroCard}>
+        <p className={styles.heroKicker}>WITAJ PONOWNIE, {(user?.displayName ?? 'UŻYTKOWNIKU').toUpperCase()}</p>
+        <h1 className={styles.heroTitle}>Gotowy na wieczór filmowy?</h1>
+        <p className={styles.heroSubtitle}>Znajdź film, który wszyscy naprawdę chcą obejrzeć.</p>
+        <div className={styles.buttonRow}>
+          <button className={styles.primaryButton} onClick={() => navigate('/setup')}>Nowa sesja</button>
+          <button className={styles.secondaryButton} onClick={() => navigate('/login?mode=join')}>Dołącz do sesji</button>
+        </div>
       </section>
 
       <section className={styles.suggestedSection}>
@@ -91,20 +74,22 @@ export default function DashboardPage() {
 
         <div className={styles.suggestedGrid}>
           {suggested.map((movie) => (
-            <article key={movie.id} className={styles.suggestedCard}>
-              <div
-                className={styles.suggestedImage}
-                style={{ backgroundImage: `url(${movie.poster})` }}
-              >
+            <a
+              key={movie.id}
+              className={styles.suggestedCard}
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className={styles.suggestedImage}>
+                <MoviePoster src={movie.poster} alt={movie.title} className={styles.suggestedPoster} />
                 <span className={styles.suggestedBadge}>{movie.platforms[0]}</span>
               </div>
               <div className={styles.suggestedCopy}>
                 <h3>{movie.title}</h3>
-                <p>
-                  {movie.genre.join(' • ')} • {movie.year}
-                </p>
+                <p>{movie.genre.join(' • ')} • {movie.year}</p>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </section>
@@ -115,13 +100,13 @@ export default function DashboardPage() {
         </div>
 
         <div className={styles.recentList}>
-          {recentSessions.map((session) => (
-            <div key={session.title} className={styles.recentItem}>
+          {recentSessions.map((s) => (
+            <div key={s.title} className={styles.recentItem}>
               <div>
-                <p className={styles.recentTitle}>{session.title}</p>
-                <p className={styles.recentSubtitle}>{session.subtitle}</p>
+                <p className={styles.recentTitle}>{s.title}</p>
+                <p className={styles.recentSubtitle}>{s.subtitle}</p>
               </div>
-              <span className={styles.recentTime}>{session.time}</span>
+              <span className={styles.recentTime}>{s.time}</span>
             </div>
           ))}
         </div>

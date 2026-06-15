@@ -10,7 +10,7 @@ export default function LoginPage() {
   const isJoin = mode === 'join'
 
   const [name, setName] = useState('')
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState((params.get('code') ?? '').toUpperCase())
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <input
               className={styles.input}
               type="text"
-              placeholder="np. Zuzia"
+              placeholder="np. Zuza"
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={30}
