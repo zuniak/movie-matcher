@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useAuth } from '../hooks/useAuth'
+import { getAuthError } from '../utils/firebaseError'
 import styles from './RegisterPage.module.css'
 
 export default function RegisterPage() {
@@ -36,7 +37,7 @@ export default function RegisterPage() {
       })
       navigate('/dashboard')
     } catch (err) {
-      setError(err.message)
+      setError(getAuthError(err))
     } finally {
       setLoading(false)
     }

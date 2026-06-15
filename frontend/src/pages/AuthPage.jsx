@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useAuth } from '../hooks/useAuth'
+import { getAuthError } from '../utils/firebaseError'
 import styles from './AuthPage.module.css'
 
 export default function AuthPage() {
@@ -29,7 +30,7 @@ export default function AuthPage() {
       await signInWithEmailAndPassword(auth, email, password)
       navigate(from, { replace: true })
     } catch (err) {
-      setError(err.message)
+      setError(getAuthError(err))
     } finally {
       setLoading(false)
     }
